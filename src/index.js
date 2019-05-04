@@ -7,7 +7,16 @@ const mainContainer = document.querySelector(`#root`);
 
 const init = () => {
   ReactDOM.render(
-      <App />,
+      <App
+        rentList={
+          [
+            `Beautiful & luxurious apartment at great location`,
+            `Wood and stone place`,
+            `White castle`,
+            `Nice, cozy, warm big bed apartment`
+          ]
+        }
+      />,
       mainContainer
   );
 };
