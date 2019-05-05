@@ -3,9 +3,11 @@ import propTypes from 'prop-types';
 
 const Favorites = (props) => {
   const name = props.name;
+  const onTitleClick = props.onTitleClick;
 
   Favorites.propTypes = {
-    name: propTypes.string.isRequired
+    name: propTypes.string.isRequired,
+    onTitleClick: propTypes.func
   };
 
   return <article className="favorites__card">
@@ -34,7 +36,7 @@ const Favorites = (props) => {
         </div>
       </div>
       <h2 className="place-card__name">
-        <a href="#">{name}</a>
+        <a onClick={onTitleClick} href="#">{name}</a>
       </h2>
       <p className="place-card__type">Apartment</p>
     </div>
