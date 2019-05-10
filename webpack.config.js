@@ -1,4 +1,7 @@
+/* eslint-disable */
+
 const path = require(`path`);
+const webpack = require(`webpack`);
 
 module.exports = {
   entry: `./src/index.js`,
@@ -11,6 +14,10 @@ module.exports = {
     compress: false,
     port: 1337,
   },
+  devtool: `source-map`,
+  resolve: {
+    extensions: [`.js`, `.jsx`]
+  },
   module: {
     rules: [
       {
@@ -22,5 +29,11 @@ module.exports = {
       }
     ],
   },
-  devtool: `source-map`
+  plugins: [
+    new webpack.ProvidePlugin({
+      'React': 'react',
+      'ReactDOM': 'react-dom',
+      'propTypes': 'prop-types'
+    })
+  ]
 };
