@@ -3,19 +3,14 @@ import ReactDOM from 'react-dom';
 
 import App from './components/app/app.jsx';
 
+import offers from './mocks/offers';
+
 const mainContainer = document.querySelector(`#root`);
 
 const init = () => {
   ReactDOM.render(
       <App
-        rentList={
-          [
-            `Beautiful & luxurious apartment at great location`,
-            `Wood and stone place`,
-            `White castle`,
-            `Nice, cozy, warm big bed apartment`
-          ]
-        }
+        offers={offers}
       />,
       mainContainer
   );

@@ -1,19 +1,17 @@
-import React from 'react';
-import propTypes from 'prop-types';
+import {Fragment} from 'react';
 
-import Favorites from '../favorites/favorites.jsx';
+import MainPage from '../main-page/main-page';
 
 const App = (props) => {
-  const rentList = props.rentList;
+  const {offers} = props;
 
-  App.propTypes = {
-    rentList: propTypes.array
-  };
+  return <Fragment>
+    <MainPage offers={offers} />
+  </Fragment>;
+};
 
-  return <div>
-    <h1>React application</h1>
-    {rentList.map((it, idx) => <Favorites key={idx} name={it} />)}
-  </div>;
+App.propTypes = {
+  offers: propTypes.array.isRequired
 };
 
 export default App;

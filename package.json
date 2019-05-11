@@ -5,7 +5,7 @@
   "description": "Личный проект «Шесть городов» от HTML Academy",
   "scripts": {
     "eslint": "eslint src/**/*.js src/**/*.jsx",
-    "test": "npm run eslint && jest",
+    "test": "npm run eslint && jest --config jest.config.json --no-cache",
     "build": "webpack --mode development",
     "start": "webpack-dev-server --open"
   },
