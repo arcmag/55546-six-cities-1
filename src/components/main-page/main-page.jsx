@@ -1,6 +1,7 @@
 import {Fragment} from 'react';
 
 import PlaceList from '../place-list/place-list';
+import MainMap from '../main-map/main-map';
 
 class MainPage extends React.PureComponent {
   constructor(props) {
@@ -114,7 +115,7 @@ class MainPage extends React.PureComponent {
               <PlaceList offers={offers} />
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <MainMap offers={offers} />
             </div>
           </div>
         </div>

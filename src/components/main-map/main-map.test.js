@@ -1,8 +1,8 @@
 import renderer from 'react-test-renderer';
 
-import PlaceList from './place-list';
+import MainMap from './main-map';
 
-const dataMock = [
+const mockOffers = [
   {
     title: `Beautiful & luxurious apartment at great location`,
     src: `img/apartment-01.jpg`,
@@ -25,9 +25,9 @@ const dataMock = [
   }
 ];
 
-describe(`Test PlaceList`, () => {
-  it(`Test PlaceList renderer`, () => {
-    const tree = renderer.create(<PlaceList offers={dataMock} />).toJSON();
+describe(`Test MainMap`, () => {
+  it(`test renderer`, () => {
+    const tree = renderer.create(<MainMap offers={mockOffers} />).toJSON();
     expect(tree).toMatchSnapshot();
   });
 });
