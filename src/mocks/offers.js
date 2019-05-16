@@ -5,6 +5,7 @@ const placeCardsDataList = [
     price: 120,
     rating: 4.7,
     type: `Apartment`,
+    coordinate: [52.3909553943508, 4.85309666406198],
     isChecked: false,
     isPremium: true
   },
@@ -14,6 +15,7 @@ const placeCardsDataList = [
     price: 80,
     rating: 4,
     type: `Private room`,
+    coordinate: [52.369553943508, 4.85309666406198],
     isChecked: true,
     isPremium: false
   },
@@ -23,6 +25,7 @@ const placeCardsDataList = [
     price: 132,
     rating: 4,
     type: `Apartment`,
+    coordinate: [52.3909553943508, 4.929309666406198],
     isChecked: false,
     isPremium: false
   },
@@ -32,6 +35,7 @@ const placeCardsDataList = [
     price: 180,
     rating: 5,
     type: `Apartment`,
+    coordinate: [52.3809553943508, 4.939309666406198],
     isChecked: false,
     isPremium: true
   },
