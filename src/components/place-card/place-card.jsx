@@ -1,6 +1,6 @@
 const PlaceCard = (props) => {
   const {title, src, price, rating, type, isChecked, isPremium} = props.data;
-  const {onImgClick} = props;
+  const {onImgMouseOver, onImgMouseOut, onImgClick} = props;
 
   return <article
     className="cities__place-card place-card">
@@ -9,7 +9,11 @@ const PlaceCard = (props) => {
     </div> : ``}
 
     <div className="cities__image-wrapper place-card__image-wrapper">
-      <a href="#" onClick={onImgClick}>
+      <a href="#"
+        onMouseOver={onImgMouseOver}
+        onMouseOut={onImgMouseOut}
+        onClick={onImgClick}
+      >
         <img className="place-card__image" src={src} width="260" height="200" />
       </a>
     </div>
@@ -50,7 +54,9 @@ PlaceCard.propTypes = {
     isChecked: propTypes.bool,
     isPremium: propTypes.bool
   }).isRequired,
-  onImgClick: propTypes.func.isRequired
+  onImgClick: propTypes.func.isRequired,
+  onImgMouseOver: propTypes.func.isRequired,
+  onImgMouseOut: propTypes.func.isRequired
 };
 
 export default PlaceCard;

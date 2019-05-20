@@ -20,6 +20,8 @@ exports[`Test PlaceList Test PlaceList renderer 1`] = `
       <a
         href="#"
         onClick={[Function]}
+        onMouseOut={[Function]}
+        onMouseOver={[Function]}
       >
         <img
           className="place-card__image"
@@ -122,6 +124,8 @@ exports[`Test PlaceList Test PlaceList renderer 1`] = `
       <a
         href="#"
         onClick={[Function]}
+        onMouseOut={[Function]}
+        onMouseOver={[Function]}
       >
         <img
           className="place-card__image"

@@ -17,8 +17,8 @@ describe(`Test PlaceCard`, () => {
     const tree = renderer.create(<PlaceCard
       data={dataMock}
       onImgClick={jest.fn()}
-      onCardMouseOver={jest.fn()}
-      onCardMouseOut={jest.fn()}
+      onImgMouseOver={jest.fn()}
+      onImgMouseOut={jest.fn()}
     />).toJSON();
     expect(tree).toMatchSnapshot();
   });

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Test MainPage Test MainPage renderer 1`] = `
+exports[`Test MainPage test renderer 1`] = `
 Array [
   <div
     style={
@@ -115,43 +115,9 @@ Array [
             className="locations__item"
           >
             <a
-              className="locations__item-link tabs__item"
-              href="#"
-            >
-              <span>
-                Paris
-              </span>
-            </a>
-          </li>
-          <li
-            className="locations__item"
-          >
-            <a
-              className="locations__item-link tabs__item"
-              href="#"
-            >
-              <span>
-                Cologne
-              </span>
-            </a>
-          </li>
-          <li
-            className="locations__item"
-          >
-            <a
-              className="locations__item-link tabs__item"
-              href="#"
-            >
-              <span>
-                Brussels
-              </span>
-            </a>
-          </li>
-          <li
-            className="locations__item"
-          >
-            <a
               className="locations__item-link tabs__item tabs__item--active"
+              href="#"
+              onClick={[Function]}
             >
               <span>
                 Amsterdam
@@ -162,11 +128,12 @@ Array [
             className="locations__item"
           >
             <a
-              className="locations__item-link tabs__item"
+              className="locations__item-link tabs__item "
               href="#"
+              onClick={[Function]}
             >
               <span>
-                Hamburg
+                Paris
               </span>
             </a>
           </li>
@@ -174,11 +141,12 @@ Array [
             className="locations__item"
           >
             <a
-              className="locations__item-link tabs__item"
+              className="locations__item-link tabs__item "
               href="#"
+              onClick={[Function]}
             >
               <span>
-                Dusseldorf
+                Cologne
               </span>
             </a>
           </li>
@@ -202,7 +170,7 @@ Array [
           <b
             className="places__found"
           >
-            312 places to stay in Amsterdam
+            0 places to stay in Amsterdam
           </b>
           <form
             action="#"

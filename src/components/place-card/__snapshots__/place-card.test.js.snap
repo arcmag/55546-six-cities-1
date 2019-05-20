@@ -17,6 +17,8 @@ exports[`Test PlaceCard Test PlaceCard renderer 1`] = `
     <a
       href="#"
       onClick={[MockFunction]}
+      onMouseOut={[MockFunction]}
+      onMouseOver={[MockFunction]}
     >
       <img
         className="place-card__image"

@@ -7,22 +7,37 @@ class PlaceList extends React.PureComponent {
     this.state = {
       actionCard: null
     };
+
+    this._setActionCard = this._setActionCard.bind(this);
+    this._clearActionCard = this._clearActionCard.bind(this);
   }
 
-  _setActionCard(evt) {
+  _setActionCard(card) {
     this.setState({
-      actionCard: evt.currentTarget
+      actionCard: card
+    });
+  }
+
+  _clearActionCard() {
+    this.setState({
+      actionCard: null
     });
   }
 
   render() {
-    const {offers} = this.props;
+    const {selectedCity} = this.props;
+    const offers = selectedCity === `` ? this.props.offers : this.props.offers
+      .filter((it) => it.city.name === selectedCity);
 
     return <div className="cities__places-list places__list tabs__content">
       {offers.map((it, idx) => <PlaceCard
         key={idx}
         data={it}
-        onImgClick={this._setActionCard.bind(this)}
+        onImgClick={this._setActionCard}
+        onImgMouseOver={() => {
+          this._setActionCard(it);
+        }}
+        onImgMouseOut={this._clearActionCard}
       />)}
     </div>;
   }
@@ -37,7 +52,8 @@ PlaceList.propTypes = {
     type: propTypes.string.isRequired,
     isChecked: propTypes.bool,
     isPremium: propTypes.bool
-  })).isRequired
+  })).isRequired,
+  selectedCity: propTypes.string.isRequired,
 };
 
 export default PlaceList;
