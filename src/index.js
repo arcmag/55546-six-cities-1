@@ -9,9 +9,13 @@ import App from './components/app/app';
 import offers from './mocks/offers';
 
 const mainContainer = document.querySelector(`#root`);
-const store = createStore(reducer);
 
 const init = () => {
+  const store = createStore(
+      reducer,
+      window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  );
+
   ReactDOM.render(
       <Provider store={store}>
         <App offers={offers} />

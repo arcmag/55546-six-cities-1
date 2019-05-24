@@ -1,22 +1,13 @@
-import {Fragment} from 'react';
-
-import CitiesList from '../cities-list/cities-list';
-import PlaceList from '../place-list/place-list';
-import MainMap from '../main-map/main-map';
-
 class MainPage extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  _getInfoPlaceFound(offers, city) {
-    return `${offers.filter((it) => it.city.name === city).length} places to stay in ${city}`;
-  }
-
   render() {
-    const {city, offers, cities, setActiveCity} = this.props;
+    const {
+      renderInfoPlaceFound,
+      renderCitiesList,
+      renderPlaceList,
+      renderMainMap,
+    } = this.props;
 
-    return <Fragment>
+    return <>
       <div style={{display: `none`}}>
         <svg xmlns="http://www.w3.org/2000/svg">
           <symbol id="icon-arrow-select" viewBox="0 0 7 4">
@@ -53,12 +44,12 @@ class MainPage extends React.Component {
       </header>
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
-        <CitiesList onLinkClick={setActiveCity} selectedCity={city} cities={cities} />
+        {renderCitiesList()}
         <div className="cities__places-wrapper">
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{this._getInfoPlaceFound(offers, city)}</b>
+              <b className="places__found">{renderInfoPlaceFound()}</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex="0">
@@ -82,24 +73,23 @@ class MainPage extends React.Component {
               </select> */}
 
               </form>
-              <PlaceList selectedCity={city} offers={offers} />
+              {renderPlaceList()}
             </section>
             <div className="cities__right-section">
-              <MainMap selectedCity={city} offers={offers} />
+              {renderMainMap()}
             </div>
           </div>
         </div>
       </main>
-    </Fragment>;
+    </>;
   }
 }
 
 MainPage.propTypes = {
-  offers: propTypes.array.isRequired,
-  cities: propTypes.array.isRequired,
-
-  setActiveCity: propTypes.func.isRequired,
-  city: propTypes.string.isRequired,
+  renderInfoPlaceFound: propTypes.func.isRequired,
+  renderCitiesList: propTypes.func.isRequired,
+  renderPlaceList: propTypes.func.isRequired,
+  renderMainMap: propTypes.func.isRequired
 };
 
 export default MainPage;

@@ -3,12 +3,16 @@ import {connect} from 'react-redux';
 
 import MainPage from '../main-page/main-page';
 
+import withMainPage from '../../hocs/with-main-page/with-main-page';
+
+const WrapperMainPage = withMainPage(MainPage);
+
 const App = (props) => {
   const {city, offers, setActiveCity} = props;
   const cities = [...new Set(offers.map((it) => it.city.name))].slice(0, 6);
 
   return <Fragment>
-    <MainPage
+    <WrapperMainPage
       setActiveCity={setActiveCity}
       city={city ? city : cities[0]}
       cities={cities}

@@ -103,57 +103,6 @@ Array [
       Cities
     </h1>
     <div
-      className="cities tabs"
-    >
-      <section
-        className="locations container"
-      >
-        <ul
-          className="locations__list tabs__list"
-        >
-          <li
-            className="locations__item"
-          >
-            <a
-              className="locations__item-link tabs__item tabs__item--active"
-              href="#"
-              onClick={[Function]}
-            >
-              <span>
-                Amsterdam
-              </span>
-            </a>
-          </li>
-          <li
-            className="locations__item"
-          >
-            <a
-              className="locations__item-link tabs__item "
-              href="#"
-              onClick={[Function]}
-            >
-              <span>
-                Paris
-              </span>
-            </a>
-          </li>
-          <li
-            className="locations__item"
-          >
-            <a
-              className="locations__item-link tabs__item "
-              href="#"
-              onClick={[Function]}
-            >
-              <span>
-                Cologne
-              </span>
-            </a>
-          </li>
-        </ul>
-      </section>
-    </div>
-    <div
       className="cities__places-wrapper"
     >
       <div
@@ -169,9 +118,7 @@ Array [
           </h2>
           <b
             className="places__found"
-          >
-            0 places to stay in Amsterdam
-          </b>
+          />
           <form
             action="#"
             className="places__sorting"
@@ -226,18 +173,10 @@ Array [
               </li>
             </ul>
           </form>
-          <div
-            className="cities__places-list places__list tabs__content"
-          />
         </section>
         <div
           className="cities__right-section"
-        >
-          <section
-            className="cities__map map"
-            id="map"
-          />
-        </div>
+        />
       </div>
     </div>
   </main>,

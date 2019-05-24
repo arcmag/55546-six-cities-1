@@ -1,9 +1,23 @@
-import renderer from 'react-test-renderer';
+import {configure, shallow} from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 
-import PlaceList from './place-list';
+import withMainPage from './with-main-page';
+
+configure({adapter: new Adapter()});
+
+const MockComponent = <div />;
+const WrapperMockComponent = withMainPage(MockComponent);
 
 const mock = {
-  selectedCity: `Paris`,
+  city: `Paris`,
+  cities: [
+    `Paris`,
+    `Cologne`,
+    `Brussels`,
+    `Amsterdam`,
+    `Hamburg`,
+    `Dusseldorf`
+  ],
   offers: [
     {
       title: `Beautiful & luxurious apartment at great location`,
@@ -32,17 +46,23 @@ const mock = {
       coordinate: [48.852969123654, 2.351074654123],
       isChecked: false,
       isPremium: true
-    }
+    },
   ]
 };
+/* eslint-disable */
+console.log(`--------------------`, WrapperMockComponent);
 
-describe(`Test PlaceList`, () => {
-  it(`Test PlaceList renderer`, () => {
-    const tree = renderer.create(<PlaceList
-      renderOffers={jest.fn()}
+
+describe(`e2e test hoc withMainPage`, () => {
+  it(`renderInfoPlaceFound`, () => {
+    const tree = shallow(<WrapperMockComponent
+      setActiveCity={jest.fn()}
+      city={mock.city}
+      cities={mock.cities}
       offers={mock.offers}
-      selectedCity={mock.selectedCity}
-    />).toJSON();
-    expect(tree).toMatchSnapshot();
+    />);
+
+    expect(tree.props().renderInfoPlaceFound())
+      .toEqual(`2 places to stay in Paris`);
   });
 });
