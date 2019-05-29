@@ -1,5 +1,24 @@
+const dataCardAdapter = (data) => {
+  return Object.assign({}, data, {
+    avatarUrl: data.avatar_url,
+    isPro: data.is_pro,
+    isFavorite: data.is_favorite,
+    isPremium: data.is_premium,
+    maxAdults: data.max_adults,
+    previewImage: data.preview_image,
+  });
+};
+
 const PlaceCard = (props) => {
-  const {title, src, price, rating, type, isChecked, isPremium} = props.data;
+  const {
+    title,
+    previewImage,
+    price,
+    rating,
+    type,
+    isFavorite,
+    isPremium,
+  } = dataCardAdapter(props.data);
   const {onImgMouseOver, onImgMouseOut, onImgClick} = props;
 
   return <article
@@ -14,7 +33,7 @@ const PlaceCard = (props) => {
         onMouseOut={onImgMouseOut}
         onClick={onImgClick}
       >
-        <img className="place-card__image" src={src} width="260" height="200" />
+        <img className="place-card__image" src={previewImage} width="260" height="200" />
       </a>
     </div>
     <div className="place-card__info">
@@ -23,7 +42,7 @@ const PlaceCard = (props) => {
           <b className="place-card__price-value">&euro;{price}</b>
           <span className="place-card__price-text">&#47;&nbsp;night</span>
         </div>
-        <button className={`place-card__bookmark-button button ${isChecked ? `place-card__bookmark-button--active` : ``}`} type="button">
+        <button className={`place-card__bookmark-button button ${isFavorite ? `place-card__bookmark-button--active` : ``}`} type="button">
           <svg className="place-card__bookmark-icon" width="18" height="19">
             <use xlinkHref="#icon-bookmark"></use>
           </svg>
@@ -45,15 +64,7 @@ const PlaceCard = (props) => {
 };
 
 PlaceCard.propTypes = {
-  data: propTypes.shape({
-    title: propTypes.string.isRequired,
-    src: propTypes.string.isRequired,
-    price: propTypes.number.isRequired,
-    rating: propTypes.number.isRequired,
-    type: propTypes.string.isRequired,
-    isChecked: propTypes.bool,
-    isPremium: propTypes.bool
-  }).isRequired,
+  data: propTypes.object.isRequired,
   onImgClick: propTypes.func.isRequired,
   onImgMouseOver: propTypes.func.isRequired,
   onImgMouseOut: propTypes.func.isRequired

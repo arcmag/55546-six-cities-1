@@ -55,16 +55,8 @@ const withPlaceList = (Component) => {
   }
 
   WithPlaceList.propTypes = {
-    offers: propTypes.arrayOf(propTypes.shape({
-      title: propTypes.string.isRequired,
-      src: propTypes.string.isRequired,
-      price: propTypes.number.isRequired,
-      rating: propTypes.number.isRequired,
-      type: propTypes.string.isRequired,
-      isChecked: propTypes.bool,
-      isPremium: propTypes.bool
-    })).isRequired,
-    selectedCity: propTypes.string.isRequired,
+    offers: propTypes.array.isRequired,
+    selectedCity: propTypes.any,
   };
 
   return WithPlaceList;

@@ -103,6 +103,17 @@ Array [
       Cities
     </h1>
     <div
+      className="cities tabs"
+    >
+      <section
+        className="locations container"
+      >
+        <ul
+          className="locations__list tabs__list"
+        />
+      </section>
+    </div>
+    <div
       className="cities__places-wrapper"
     >
       <div
@@ -118,7 +129,9 @@ Array [
           </h2>
           <b
             className="places__found"
-          />
+          >
+            0 places to stay in 
+          </b>
           <form
             action="#"
             className="places__sorting"
@@ -173,10 +186,18 @@ Array [
               </li>
             </ul>
           </form>
+          <div
+            className="cities__places-list places__list tabs__content"
+          />
         </section>
         <div
           className="cities__right-section"
-        />
+        >
+          <section
+            className="cities__map map"
+            id="map"
+          />
+        </div>
       </div>
     </div>
   </main>,

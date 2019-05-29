@@ -1,12 +1,47 @@
-class MainPage extends React.Component {
-  render() {
-    const {
-      renderInfoPlaceFound,
-      renderCitiesList,
-      renderPlaceList,
-      renderMainMap,
-    } = this.props;
+import CitiesList from '../cities-list/cities-list';
+import PlaceList from '../place-list/place-list';
+import MainMap from '../main-map/main-map';
 
+import withCityMap from '../../hocs/with-city-map/with-city-map';
+import withPlaceList from '../../hocs/with-place-list/with-place-list';
+
+const WrapperMainMap = withCityMap(MainMap);
+const WrapperPlaceList = withPlaceList(PlaceList);
+
+class MainPage extends React.Component {
+  _renderInfoPlaceFound() {
+    const {city, offers} = this.props;
+    return `${offers.filter((it) => it.city.name === city).length} places to stay in ${city}`;
+  }
+
+  _renderCitiesList() {
+    const {city, cities, setActiveCity} = this.props;
+
+    return <CitiesList
+      onLinkClick={setActiveCity}
+      selectedCity={city}
+      cities={cities}
+    />;
+  }
+
+  _renderMainMap() {
+    const {city, offers} = this.props;
+    return <WrapperMainMap
+      selectedCity={city}
+      offers={offers}
+    />;
+  }
+
+  _renderPlaceList() {
+    const {city, offers} = this.props;
+
+    return <WrapperPlaceList
+      selectedCity={city}
+      offers={offers}
+    />;
+  }
+
+  render() {
     return <>
       <div style={{display: `none`}}>
         <svg xmlns="http://www.w3.org/2000/svg">
@@ -44,12 +79,12 @@ class MainPage extends React.Component {
       </header>
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
-        {renderCitiesList()}
+        {this._renderCitiesList()}
         <div className="cities__places-wrapper">
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{renderInfoPlaceFound()}</b>
+              <b className="places__found">{this._renderInfoPlaceFound()}</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex="0">
@@ -73,10 +108,10 @@ class MainPage extends React.Component {
               </select> */}
 
               </form>
-              {renderPlaceList()}
+              {this._renderPlaceList()}
             </section>
             <div className="cities__right-section">
-              {renderMainMap()}
+              {this._renderMainMap()}
             </div>
           </div>
         </div>
@@ -86,10 +121,10 @@ class MainPage extends React.Component {
 }
 
 MainPage.propTypes = {
-  renderInfoPlaceFound: propTypes.func.isRequired,
-  renderCitiesList: propTypes.func.isRequired,
-  renderPlaceList: propTypes.func.isRequired,
-  renderMainMap: propTypes.func.isRequired
+  offers: propTypes.array.isRequired,
+  cities: propTypes.array.isRequired,
+  setActiveCity: propTypes.func.isRequired,
+  city: propTypes.any
 };
 
 export default MainPage;

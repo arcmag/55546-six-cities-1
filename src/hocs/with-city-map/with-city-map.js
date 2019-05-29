@@ -1,29 +1,35 @@
 import leaflet from 'leaflet';
 
-const zoom = 12;
-
 const icon = leaflet.icon({
   iconUrl: `img/pin.svg`,
   iconSize: [30, 30]
 });
 
-let city = [52.38333, 4.9];
+let center = [52.38333, 4.9];
+let zoom = 12;
 
 let map = null;
 
 const withCityMap = (Component) => {
   class WithCityMap extends React.Component {
-    _init(props) {
-      const {selectedCity} = props || this.props;
-      const offers = selectedCity === `` ? this.props.offers : this.props.offers
+    _init(props = this.props) {
+      const {selectedCity} = props;
+
+      const offers = selectedCity === `` ? props.offers : props.offers
         .filter((it) => it.city.name === selectedCity);
 
-      if (offers[0]) {
-        city = offers[0].city.coordinate;
+      const firstOffer = offers[0];
+
+      if (!firstOffer) {
+        return;
       }
 
+      const location = firstOffer.city.location;
+      center = [location.latitude, location.longitude];
+      zoom = location.zoom;
+
       map = leaflet.map(`map`, {
-        center: city,
+        center,
         zoom,
         zoomControl: false,
         marker: true
@@ -35,8 +41,8 @@ const withCityMap = (Component) => {
         })
         .addTo(map);
 
-      offers.forEach((it) => leaflet.marker(it.coordinate, {icon}).addTo(map));
-      map.setView(city, zoom);
+      offers.forEach((it) => leaflet.marker([it.location.latitude, it.location.longitude], {icon}).addTo(map));
+      map.setView(center, zoom);
     }
 
     componentDidMount() {
@@ -48,8 +54,12 @@ const withCityMap = (Component) => {
     }
 
     shouldComponentUpdate(props) {
-      map.remove();
+      if (map) {
+        map.remove();
+      }
+
       this._init(props);
+
       return true;
     }
 
@@ -62,7 +72,7 @@ const withCityMap = (Component) => {
 
   WithCityMap.propTypes = {
     offers: propTypes.array.isRequired,
-    selectedCity: propTypes.string.isRequired,
+    selectedCity: propTypes.any,
   };
 
   return WithCityMap;
