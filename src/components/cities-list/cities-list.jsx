@@ -20,8 +20,8 @@ const CitiesList = (props) => {
 
 CitiesList.propTypes = {
   cities: propTypes.array.isRequired,
-  selectedCity: propTypes.string.isRequired,
   onLinkClick: propTypes.func.isRequired,
+  selectedCity: propTypes.any
 };
 
 export default CitiesList;

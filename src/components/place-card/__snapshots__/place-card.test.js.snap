@@ -4,13 +4,7 @@ exports[`Test PlaceCard Test PlaceCard renderer 1`] = `
 <article
   className="cities__place-card place-card"
 >
-  <div
-    className="place-card__mark"
-  >
-    <span>
-      Premium
-    </span>
-  </div>
+  
   <div
     className="cities__image-wrapper place-card__image-wrapper"
   >
@@ -23,7 +17,6 @@ exports[`Test PlaceCard Test PlaceCard renderer 1`] = `
       <img
         className="place-card__image"
         height="200"
-        src="img/apartment-01.jpg"
         width="260"
       />
     </a>

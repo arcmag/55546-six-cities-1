@@ -1,40 +1,39 @@
-import {Fragment} from 'react';
 import {connect} from 'react-redux';
+import {ActionCreator} from "../../reducer/user/user";
+import {getHotels, getCities} from "../../reducer/data/selectors";
+import {getSelectCity} from "../../reducer/user/selectors";
 
 import MainPage from '../main-page/main-page';
 
-import withMainPage from '../../hocs/with-main-page/with-main-page';
-
-const WrapperMainPage = withMainPage(MainPage);
-
 const App = (props) => {
-  const {city, offers, setActiveCity} = props;
-  const cities = [...new Set(offers.map((it) => it.city.name))].slice(0, 6);
+  const {setActiveCity, hotels, cities, selectCity} = props;
 
-  return <Fragment>
-    <WrapperMainPage
+  return <>
+    <MainPage
       setActiveCity={setActiveCity}
-      city={city ? city : cities[0]}
+      city={selectCity || cities[0]}
       cities={cities}
-      offers={offers}
+      offers={hotels}
     />
-  </Fragment>;
+  </>;
 };
 
 App.propTypes = {
   setActiveCity: propTypes.func.isRequired,
-  city: propTypes.string.isRequired,
-  offers: propTypes.array.isRequired,
+  hotels: propTypes.array.isRequired,
+  cities: propTypes.array.isRequired,
+  selectCity: propTypes.string.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
-  city: state.city,
-  offers: state.offers
+  hotels: getHotels(state),
+  cities: getCities(state),
+  selectCity: getSelectCity(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
   setActiveCity: (cityName) => {
-    dispatch({type: `SET_CITY`, payload: cityName});
+    dispatch(ActionCreator.setSelectCity(cityName));
   }
 });
 

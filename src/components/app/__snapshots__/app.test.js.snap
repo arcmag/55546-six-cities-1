@@ -110,21 +110,7 @@ Array [
       >
         <ul
           className="locations__list tabs__list"
-        >
-          <li
-            className="locations__item"
-          >
-            <a
-              className="locations__item-link tabs__item "
-              href="#"
-              onClick={[Function]}
-            >
-              <span>
-                Paris
-              </span>
-            </a>
-          </li>
-        </ul>
+        />
       </section>
     </div>
     <div
@@ -144,7 +130,7 @@ Array [
           <b
             className="places__found"
           >
-            0 places to stay in Amsterdam
+            0 places to stay in undefined
           </b>
           <form
             action="#"
