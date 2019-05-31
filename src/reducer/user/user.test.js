@@ -5,6 +5,8 @@ import {
   Operation,
 } from "./user";
 
+const SUCCESS_STATUS = 200;
+
 describe(`Test reducer user`, () => {
   it(`sign in`, function () {
     const dispatch = jest.fn();
@@ -14,7 +16,7 @@ describe(`Test reducer user`, () => {
 
     apiMock
       .onPost(`/login`)
-      .reply(200, {data: true});
+      .reply(SUCCESS_STATUS, {data: true});
 
     return signIn(dispatch, jest.fn(), api)
       .then(() => {
@@ -39,7 +41,7 @@ describe(`Test reducer user`, () => {
 
     apiMock
       .onGet(`/login`)
-      .reply(200, {data: true});
+      .reply(SUCCESS_STATUS, {data: true});
 
     return checkAuthorization(dispatch, jest.fn(), api)
       .then(() => {

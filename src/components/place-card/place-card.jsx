@@ -1,3 +1,5 @@
+const FIVE_STARS_RATE = 5 / 100;
+
 const dataCardAdapter = (data) => {
   return Object.assign({}, data, {
     avatarUrl: data.avatar_url,
@@ -51,7 +53,7 @@ const PlaceCard = (props) => {
       </div>
       <div className="place-card__rating rating">
         <div className="place-card__stars rating__stars">
-          <span style={{width: rating / (5 / 100) + `%`}}></span>
+          <span style={{width: rating / FIVE_STARS_RATE + `%`}}></span>
           <span className="visually-hidden">Rating</span>
         </div>
       </div>
