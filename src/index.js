@@ -7,6 +7,7 @@ import thunk from 'redux-thunk';
 import {compose} from 'recompose';
 import {createAPI} from './api';
 import {Operation} from "./reducer/data/data";
+import {Operation as UserOperation} from "./reducer/user/user";
 
 import App from './components/app/app';
 
@@ -26,6 +27,7 @@ const init = () => {
   /* eslint-enable */
 
   store.dispatch(Operation.loadHotels());
+  store.dispatch(UserOperation.checkAuthorization());
 
   ReactDOM.render(
       <Provider store={store}>

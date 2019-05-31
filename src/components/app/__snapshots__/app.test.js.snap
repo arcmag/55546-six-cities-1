@@ -55,7 +55,8 @@ Array [
           className="header__left"
         >
           <a
-            className="header__logo-link header__logo-link--active"
+            className="header__logo-link"
+            href="main.html"
           >
             <img
               alt="6 cities logo"
@@ -81,7 +82,9 @@ Array [
               >
                 <div
                   className="header__avatar-wrapper user__avatar-wrapper"
-                />
+                >
+                  <img />
+                </div>
                 <span
                   className="header__user-name user__name"
                 >
