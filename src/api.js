@@ -1,20 +1,22 @@
 import axios from 'axios';
-// import {ActionCreator} from './reducer/user/user';
+import {ActionCreator} from './reducer/user/user';
 
-const TIME_OUT = 5000;
+const STATUS_ERROR = 403;
 
-// export const createAPI = (dispatch) => {
-export const createAPI = () => {
+const timeout = 5000;
+const baseURL = `https://es31-server.appspot.com/six-cities`;
+
+export const createAPI = (dispatch) => {
   const api = axios.create({
-    baseURL: `https://es31-server.appspot.com/six-cities`,
-    timeout: TIME_OUT,
+    baseURL,
+    timeout,
     withCredentials: true,
   });
 
   const onSuccess = (response) => response;
   const onFail = (err) => {
-    if (err.response.status === 403) {
-      // dispatch(ActionCreator.requireAuthorization(true));
+    if (err.response.status === STATUS_ERROR) {
+      dispatch(ActionCreator.requireAuthorization(true));
     }
     return err;
   };
