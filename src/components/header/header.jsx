@@ -1,6 +1,7 @@
+import {Link} from "react-router-dom";
+
 const Header = (props) => {
   const {isAuthorizationRequired, user} = props;
-  const img = user.avatar_url;
 
   return <>
     <div style={{display: `none`}}>
@@ -21,26 +22,21 @@ const Header = (props) => {
       <div className="container">
         <div className="header__wrapper">
           <div className="header__left">
-            <a className="header__logo-link" href="main.html">
+            <Link to="/" className="header__logo-link">
               <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
-            </a>
+            </Link>
           </div>
           <nav className="header__nav">
             <ul className="header__nav-list">
               <li className="header__nav-item user">
-                <a className="header__nav-link header__nav-link--profile" href="#">
-                  {
-                    isAuthorizationRequired ?
-                      <span className="header__login">Sign in</span> :
-                      <>
-                        <div className="header__avatar-wrapper user__avatar-wrapper">
-                          <img src={img} />
-                        </div>
-                        <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                      </>
-                  }
-                </a>
-
+                {!isAuthorizationRequired ?
+                  <Link to="/login" className="header__login">Sign in</Link> :
+                  <>
+                    <div className="header__avatar-wrapper user__avatar-wrapper">
+                      <img src={user.avatarUrl} />
+                    </div>
+                    <Link to="/favorites" className="header__user-name user__name">{user.email}</Link>
+                  </>}
               </li>
             </ul>
           </nav>
@@ -51,8 +47,14 @@ const Header = (props) => {
 };
 
 Header.propTypes = {
-  user: propTypes.object.isRequired,
-  isAuthorizationRequired: propTypes.bool.isRequired,
+  user: propTypes.shape({
+    avatarUrl: propTypes.string,
+    email: propTypes.string,
+    id: propTypes.number,
+    isPro: propTypes.bool,
+    name: propTypes.string,
+  }),
+  isAuthorizationRequired: propTypes.any,
 };
 
 export default Header;

@@ -10,22 +10,22 @@
     "start": "webpack-dev-server --open"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.4",
-    "@babel/preset-env": "^7.4.4",
-    "@babel/preset-react": "^7.0.0",
+    "@babel/core": "7.4.4",
+    "@babel/preset-env": "7.4.4",
+    "@babel/preset-react": "7.0.0",
     "babel-jest": "24.8.0",
-    "babel-loader": "^8.0.5",
+    "babel-loader": "8.0.5",
     "enzyme": "3.9.0",
     "enzyme-adapter-react-16": "1.12.1",
-    "eslint": "^5.13.0",
-    "eslint-config-htmlacademy": "^0.5.2",
-    "eslint-plugin-react": "^7.12.4",
-    "install": "^0.12.2",
+    "eslint": "5.13.0",
+    "eslint-config-htmlacademy": "0.5.2",
+    "eslint-plugin-react": "7.12.4",
+    "install": "0.12.2",
     "jest": "24.8.0",
     "react-test-renderer": "16.8.6",
-    "webpack": "^4.30.0",
-    "webpack-cli": "^3.3.1",
-    "webpack-dev-server": "^3.3.1"
+    "webpack": "4.30.0",
+    "webpack-cli": "3.3.1",
+    "webpack-dev-server": "3.3.1"
   },
   "engines": {
     "node": "10"
@@ -38,8 +38,11 @@
     "react": "16.8.6",
     "react-dom": "16.8.6",
     "react-redux": "7.0.3",
-    "recompose": "^0.30.0",
+    "react-router": "5.0.0",
+    "react-router-dom": "5.0.0",
+    "recompose": "0.30.0",
     "redux": "4.0.1",
+    "redux-devtools-extension": "2.13.8",
     "redux-thunk": "2.3.0",
     "reselect": "4.0.0"
   }

@@ -51,6 +51,7 @@ exports[`Test MainPage test renderer 1`] = `
           </span>
           <span
             className="places__sorting-type"
+            onClick={[Function]}
             tabIndex="0"
           >
             Popular
@@ -66,27 +67,32 @@ exports[`Test MainPage test renderer 1`] = `
           </span>
           <ul
             className="places__options places__options--custom"
+            onClick={[Function]}
           >
             <li
               className="places__option places__option--active"
+              data-sort-offers="default"
               tabIndex="0"
             >
               Popular
             </li>
             <li
               className="places__option"
+              data-sort-offers="max-price"
               tabIndex="0"
             >
               Price: low to high
             </li>
             <li
               className="places__option"
+              data-sort-offers="min-price"
               tabIndex="0"
             >
               Price: high to low
             </li>
             <li
               className="places__option"
+              data-sort-offers="max-rate"
               tabIndex="0"
             >
               Top rated first
@@ -95,7 +101,26 @@ exports[`Test MainPage test renderer 1`] = `
         </form>
         <div
           className="cities__places-list places__list tabs__content"
-        />
+        >
+          <section
+            className="cities__no-places"
+          >
+            <div
+              className="cities__status-wrapper tabs__content"
+            >
+              <b
+                className="cities__status"
+              >
+                No places to stay available
+              </b>
+              <p
+                className="cities__status-description"
+              >
+                We could not find any property availbale at the moment in Dusseldorf
+              </p>
+            </div>
+          </section>
+        </div>
       </section>
       <div
         className="cities__right-section"
@@ -103,6 +128,11 @@ exports[`Test MainPage test renderer 1`] = `
         <section
           className="cities__map map"
           id="map"
+          style={
+            Object {
+              "height": "500px",
+            }
+          }
         />
       </div>
     </div>

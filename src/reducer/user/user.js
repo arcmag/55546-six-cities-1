@@ -1,6 +1,6 @@
 const initialState = {
   selectCity: ``,
-  isAuthorizationRequired: true,
+  isAuthorizationRequired: null,
   user: {},
 };
 
@@ -11,10 +11,16 @@ const ActionType = {
 };
 
 const ActionCreator = {
-  signIn: (status) => {
+  signIn: (user = {}) => {
     return {
       type: ActionType.SIGN_IN,
-      payload: status
+      payload: {
+        avatarUrl: user.avatar_url,
+        email: user.email,
+        id: user.id,
+        isPro: user.is_pro,
+        name: user.name,
+      }
     };
   },
   setSelectCity: (cityName) => {
@@ -37,7 +43,7 @@ const Operation = {
       .then((response) => {
         if (response.data) {
           dispatch(ActionCreator.signIn(response.data));
-          dispatch(ActionCreator.requireAuthorization(false));
+          dispatch(ActionCreator.requireAuthorization(true));
         }
       })
       .catch(() => { });
@@ -47,10 +53,10 @@ const Operation = {
       .then((response) => {
         if (response.data) {
           dispatch(ActionCreator.signIn(response.data));
-          dispatch(ActionCreator.requireAuthorization(false));
+          dispatch(ActionCreator.requireAuthorization(true));
         }
       })
-      .catch(() => { });
+      .catch(() => {});
   },
 };
 

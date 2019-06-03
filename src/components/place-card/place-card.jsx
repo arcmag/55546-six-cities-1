@@ -1,18 +1,10 @@
-const FIVE_STARS_RATE = 5 / 100;
+import {Link} from "react-router-dom";
 
-const dataCardAdapter = (data) => {
-  return Object.assign({}, data, {
-    avatarUrl: data.avatar_url,
-    isPro: data.is_pro,
-    isFavorite: data.is_favorite,
-    isPremium: data.is_premium,
-    maxAdults: data.max_adults,
-    previewImage: data.preview_image,
-  });
-};
+const FIVE_STARS_RATE = 5 / 100;
 
 const PlaceCard = (props) => {
   const {
+    id,
     title,
     previewImage,
     price,
@@ -20,8 +12,14 @@ const PlaceCard = (props) => {
     type,
     isFavorite,
     isPremium,
-  } = dataCardAdapter(props.data);
-  const {onImgMouseOver, onImgMouseOut, onImgClick} = props;
+  } = props.data;
+
+  const {
+    // onImgMouseOver,
+    // onImgMouseOut,
+    onImgClick,
+    addHotelInFavorite
+  } = props;
 
   return <article
     className="cities__place-card place-card">
@@ -31,8 +29,8 @@ const PlaceCard = (props) => {
 
     <div className="cities__image-wrapper place-card__image-wrapper">
       <a href="#"
-        onMouseOver={onImgMouseOver}
-        onMouseOut={onImgMouseOut}
+        // onMouseOver={onImgMouseOver}
+        // onMouseOut={onImgMouseOut}
         onClick={onImgClick}
       >
         <img className="place-card__image" src={previewImage} width="260" height="200" />
@@ -44,12 +42,19 @@ const PlaceCard = (props) => {
           <b className="place-card__price-value">&euro;{price}</b>
           <span className="place-card__price-text">&#47;&nbsp;night</span>
         </div>
-        <button className={`place-card__bookmark-button button ${isFavorite ? `place-card__bookmark-button--active` : ``}`} type="button">
+        {addHotelInFavorite ? <button
+          className={`place-card__bookmark-button button ${isFavorite ? `place-card__bookmark-button--active` : ``}`}
+          type="button"
+          onClick={() => {
+            addHotelInFavorite(id, isFavorite ? 0 : 1);
+          }}
+        >
           <svg className="place-card__bookmark-icon" width="18" height="19">
             <use xlinkHref="#icon-bookmark"></use>
           </svg>
           <span className="visually-hidden">To bookmarks</span>
-        </button>
+        </button> : ``
+        }
       </div>
       <div className="place-card__rating rating">
         <div className="place-card__stars rating__stars">
@@ -58,7 +63,7 @@ const PlaceCard = (props) => {
         </div>
       </div>
       <h2 className="place-card__name">
-        <a href="#">{title}</a>
+        <Link to={`/offer/${id}`} className="header__logo-link">{title}</Link>
       </h2>
       <p className="place-card__type">{type}</p>
     </div>
@@ -66,7 +71,41 @@ const PlaceCard = (props) => {
 };
 
 PlaceCard.propTypes = {
-  data: propTypes.object.isRequired,
+  data: propTypes.shape({
+    bedrooms: propTypes.number,
+    city: propTypes.shape({
+      name: propTypes.string,
+      location: propTypes.shape({
+        latitude: propTypes.number,
+        longitude: propTypes.number,
+        zoom: propTypes.number,
+      }),
+    }),
+    description: propTypes.string,
+    goods: propTypes.array,
+    host: propTypes.shape({
+      avatarUrl: propTypes.string,
+      id: propTypes.number,
+      isPro: propTypes.bool,
+      name: propTypes.string,
+    }),
+    id: propTypes.number,
+    images: propTypes.array,
+    isFavorite: propTypes.bool,
+    isPremium: propTypes.bool,
+    location: propTypes.shape({
+      latitude: propTypes.number,
+      longitude: propTypes.number,
+      zoom: propTypes.number,
+    }),
+    maxAdults: propTypes.number,
+    previewImage: propTypes.string,
+    price: propTypes.number,
+    rating: propTypes.number,
+    title: propTypes.string,
+    type: propTypes.string,
+  }),
+  addHotelInFavorite: propTypes.any,
   onImgClick: propTypes.func.isRequired,
   onImgMouseOver: propTypes.func.isRequired,
   onImgMouseOut: propTypes.func.isRequired

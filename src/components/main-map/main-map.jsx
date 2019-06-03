@@ -1,7 +1,18 @@
 class MainMap extends React.Component {
   render() {
-    return <section className="cities__map map" id="map"></section>;
+    let mapClass = `cities__map`;
+    const {mapPropClass} = this.props;
+
+    if (mapPropClass) {
+      mapClass = mapPropClass;
+    }
+
+    return <section style={{height: `500px`}} className={`${mapClass} map`} id="map"></section>;
   }
 }
+
+MainMap.propTypes = {
+  mapPropClass: propTypes.string
+};
 
 export default MainMap;
