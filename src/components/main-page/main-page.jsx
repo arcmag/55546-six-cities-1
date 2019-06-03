@@ -2,13 +2,78 @@ import CitiesList from '../cities-list/cities-list';
 import PlaceList from '../place-list/place-list';
 import MainMap from '../main-map/main-map';
 
+import {connect} from 'react-redux';
+import {ActionCreator, Operation} from "../../reducer/data/data";
+import {getHotels} from "../../reducer/data/selectors";
+
 import withCityMap from '../../hocs/with-city-map/with-city-map';
-import withPlaceList from '../../hocs/with-place-list/with-place-list';
 
 const WrapperMainMap = withCityMap(MainMap);
-const WrapperPlaceList = withPlaceList(PlaceList);
 
 class MainPage extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this._buttonSort = React.createRef();
+    this._listSort = React.createRef();
+
+    this._onSortButtonClick = this._onSortButtonClick.bind(this);
+    this._onSortListClick = this._onSortListClick.bind(this);
+    this._onDocumentClick = this._onDocumentClick.bind(this);
+  }
+
+  render() {
+    const {
+      _buttonSort,
+      _onSortButtonClick,
+      _listSort,
+      _onSortListClick,
+    } = this;
+
+    return <>
+      <main className="page__main page__main--index">
+        <h1 className="visually-hidden">Cities</h1>
+        {this._renderCitiesList()}
+        <div className="cities__places-wrapper">
+          <div className="cities__places-container container">
+            <section className="cities__places places">
+              <h2 className="visually-hidden">Places</h2>
+              <b className="places__found">{this._renderInfoPlaceFound()}</b>
+              <form className="places__sorting" action="#" method="get">
+                <span className="places__sorting-caption">Sort by</span>
+                <span
+                  ref={_buttonSort}
+                  className="places__sorting-type"
+                  tabIndex="0"
+                  onClick={_onSortButtonClick}
+                >
+                  Popular
+                  <svg className="places__sorting-arrow" width="7" height="4">
+                    <use xlinkHref="#icon-arrow-select"></use>
+                  </svg>
+                </span>
+                <ul
+                  ref={_listSort}
+                  className="places__options places__options--custom"
+                  onClick={_onSortListClick}
+                >
+                  <li data-sort-offers="default" className="places__option places__option--active" tabIndex="0">Popular</li>
+                  <li data-sort-offers="max-price" className="places__option" tabIndex="0">Price: low to high</li>
+                  <li data-sort-offers="min-price" className="places__option" tabIndex="0">Price: high to low</li>
+                  <li data-sort-offers="max-rate" className="places__option" tabIndex="0">Top rated first</li>
+                </ul>
+              </form>
+              {this._renderPlaceList()}
+            </section>
+            <div className="cities__right-section">
+              {this._renderMainMap()}
+            </div>
+          </div>
+        </div>
+      </main>
+    </>;
+  }
+
   _renderInfoPlaceFound() {
     const {city, offers} = this.props;
     return `${offers.filter((it) => it.city.name === city).length} places to stay in ${city}`;
@@ -25,72 +90,127 @@ class MainPage extends React.Component {
   }
 
   _renderMainMap() {
-    const {city, offers} = this.props;
+    const {city, offers, actionCard} = this.props;
     return <WrapperMainMap
+      actionCard={actionCard}
       selectedCity={city}
       offers={offers}
     />;
   }
 
   _renderPlaceList() {
-    const {city, offers} = this.props;
+    const {city, offers, addHotelInFavorite, setActionCard, clearActionCard} = this.props;
 
-    return <WrapperPlaceList
+    return <PlaceList
+      setActionCard={setActionCard}
+      clearActionCard={clearActionCard}
+
       selectedCity={city}
       offers={offers}
+      addHotelInFavorite={addHotelInFavorite}
     />;
   }
 
-  render() {
-    return <>
-      <main className="page__main page__main--index">
-        <h1 className="visually-hidden">Cities</h1>
-        {this._renderCitiesList()}
-        <div className="cities__places-wrapper">
-          <div className="cities__places-container container">
-            <section className="cities__places places">
-              <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{this._renderInfoPlaceFound()}</b>
-              <form className="places__sorting" action="#" method="get">
-                <span className="places__sorting-caption">Sort by</span>
-                <span className="places__sorting-type" tabIndex="0">
-                  Popular
-                  <svg className="places__sorting-arrow" width="7" height="4">
-                    <use xlinkHref="#icon-arrow-select"></use>
-                  </svg>
-                </span>
-                <ul className="places__options places__options--custom">
-                  <li className="places__option places__option--active" tabIndex="0">Popular</li>
-                  <li className="places__option" tabIndex="0">Price: low to high</li>
-                  <li className="places__option" tabIndex="0">Price: high to low</li>
-                  <li className="places__option" tabIndex="0">Top rated first</li>
-                </ul>
+  _onSortButtonClick() {
+    this._openSortList();
+    document.addEventListener(`click`, this._onDocumentClick);
+  }
 
-                {/* <select class="places__sorting-type" id="places-sorting">
-                <option class="places__option" value="popular" selected="">Popular</option>
-                <option class="places__option" value="to-high">Price: low to high</option>
-                <option class="places__option" value="to-low">Price: high to low</option>
-                <option class="places__option" value="top-rated">Top rated first</option>
-              </select> */}
+  _onSortListClick(evt) {
+    evt.preventDefault();
+    const currentItem = evt.target;
+    const type = currentItem.dataset.sortOffers;
+    const selectedItem = document.querySelector(`.places__option--active`);
 
-              </form>
-              {this._renderPlaceList()}
-            </section>
-            <div className="cities__right-section">
-              {this._renderMainMap()}
-            </div>
-          </div>
-        </div>
-      </main>
-    </>;
+    this._buttonSort.current.replaceChild(
+        document.createTextNode(currentItem.textContent),
+        this._buttonSort.current.childNodes[0]
+    );
+
+    if (selectedItem) {
+      selectedItem.classList.remove(`places__option--active`);
+    }
+
+    currentItem.classList.add(`places__option--active`);
+
+    this.props.sortHotels(type);
+  }
+
+  _onDocumentClick() {
+    this._closeSortList();
+    document.removeEventListener(`click`, this._onDocumentClick);
+  }
+
+  _openSortList() {
+    this._listSort.current.style.display = `block`;
+  }
+
+  _closeSortList() {
+    this._listSort.current.style.display = `none`;
   }
 }
 
+const propTypeOffer = propTypes.shape({
+  bedrooms: propTypes.number,
+  city: propTypes.shape({
+    name: propTypes.string,
+    location: propTypes.shape({
+      latitude: propTypes.number,
+      longitude: propTypes.number,
+      zoom: propTypes.number,
+    }),
+  }),
+  description: propTypes.string,
+  goods: propTypes.array,
+  host: propTypes.shape({
+    avatarUrl: propTypes.string,
+    id: propTypes.number,
+    isPro: propTypes.bool,
+    name: propTypes.string,
+  }),
+  id: propTypes.number,
+  images: propTypes.array,
+  isFavorite: propTypes.bool,
+  isPremium: propTypes.bool,
+  location: propTypes.shape({
+    latitude: propTypes.number,
+    longitude: propTypes.number,
+    zoom: propTypes.number,
+  }),
+  maxAdults: propTypes.number,
+  previewImage: propTypes.string,
+  price: propTypes.number,
+  rating: propTypes.number,
+  title: propTypes.string,
+  type: propTypes.string,
+});
+
 MainPage.propTypes = {
-  offers: propTypes.array.isRequired,
-  cities: propTypes.array.isRequired,
   setActiveCity: propTypes.func.isRequired,
-  city: propTypes.any
+  sortHotels: propTypes.func.isRequired,
+  addHotelInFavorite: propTypes.func.isRequired,
+  setActionCard: propTypes.func.isRequired,
+  clearActionCard: propTypes.func.isRequired,
+  offers: propTypes.arrayOf(propTypeOffer),
+  actionCard: propTypeOffer,
+  cities: propTypes.array.isRequired,
+  city: propTypes.any,
+  isAuthorizationRequired: propTypes.any,
 };
 
-export default MainPage;
+const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
+  offers: getHotels(state),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  sortHotels: (type, hotels) => {
+    dispatch(ActionCreator.sortHotels(type, hotels));
+  },
+  addHotelInFavorite: (hotelId, status) => {
+    dispatch(Operation.addHotelInFavorite(hotelId, status));
+  },
+});
+
+export {MainPage};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainPage);

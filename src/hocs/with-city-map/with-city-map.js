@@ -5,6 +5,11 @@ const icon = leaflet.icon({
   iconSize: [30, 30]
 });
 
+const activeIcon = leaflet.icon({
+  iconUrl: `img/active-pin.svg`,
+  iconSize: [30, 30]
+});
+
 let center = [52.38333, 4.9];
 let zoom = 12;
 
@@ -14,6 +19,7 @@ const withCityMap = (Component) => {
   class WithCityMap extends React.Component {
     _init(props = this.props) {
       const {selectedCity} = props;
+      const actionCard = props.actionCard || {};
 
       const offers = selectedCity === `` ? props.offers : props.offers
         .filter((it) => it.city.name === selectedCity);
@@ -41,12 +47,28 @@ const withCityMap = (Component) => {
         })
         .addTo(map);
 
-      offers.forEach((it) => leaflet.marker([it.location.latitude, it.location.longitude], {icon}).addTo(map));
+      offers.forEach((it) => {
+
+        if (it.id === actionCard.id) {
+          center = [it.location.latitude, it.location.longitude];
+        }
+
+        leaflet
+          .marker(
+              [it.location.latitude, it.location.longitude],
+              {icon: it.id === actionCard.id ? activeIcon : icon}
+          )
+          .addTo(map);
+      });
       map.setView(center, zoom);
     }
 
     componentDidMount() {
       try {
+        if (map) {
+          map.remove();
+        }
+
         this._init();
       } catch (err) {
         // err
@@ -71,7 +93,40 @@ const withCityMap = (Component) => {
   }
 
   WithCityMap.propTypes = {
-    offers: propTypes.array.isRequired,
+    offers: propTypes.arrayOf(propTypes.shape({
+      bedrooms: propTypes.number,
+      city: propTypes.shape({
+        name: propTypes.string,
+        location: propTypes.shape({
+          latitude: propTypes.number,
+          longitude: propTypes.number,
+          zoom: propTypes.number,
+        }),
+      }),
+      description: propTypes.string,
+      goods: propTypes.array,
+      host: propTypes.shape({
+        avatarUrl: propTypes.string,
+        id: propTypes.number,
+        isPro: propTypes.bool,
+        name: propTypes.string,
+      }),
+      id: propTypes.number,
+      images: propTypes.array,
+      isFavorite: propTypes.bool,
+      isPremium: propTypes.bool,
+      location: propTypes.shape({
+        latitude: propTypes.number,
+        longitude: propTypes.number,
+        zoom: propTypes.number,
+      }),
+      maxAdults: propTypes.number,
+      previewImage: propTypes.string,
+      price: propTypes.number,
+      rating: propTypes.number,
+      title: propTypes.string,
+      type: propTypes.string,
+    })),
     selectedCity: propTypes.any,
   };
 

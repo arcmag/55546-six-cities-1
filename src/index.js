@@ -4,34 +4,36 @@ import reducer from './reducer/index';
 import {createStore, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
-import {compose} from 'recompose';
+import {composeWithDevTools} from 'redux-devtools-extension';
 import {createAPI} from './api';
 import {Operation} from "./reducer/data/data";
-import {Operation as UserOperation} from "./reducer/user/user";
+import {Operation as UserOperation, ActionCreator} from "./reducer/user/user";
+import {BrowserRouter} from "react-router-dom";
 
 import App from './components/app/app';
 
 const mainContainer = document.querySelector(`#root`);
 
 const init = () => {
-  const api = createAPI((...args) => store.dispatch(...args));
+  const api = createAPI(() => {
+    store.dispatch(ActionCreator.requireAuthorization(false));
+  });
 
-  /* eslint-disable no-underscore-dangle */
   const store = createStore(
       reducer,
-      compose(
-          applyMiddleware(thunk.withExtraArgument(api)),
-          window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+      composeWithDevTools(
+          applyMiddleware(thunk.withExtraArgument(api))
       )
   );
-  /* eslint-enable */
 
   store.dispatch(Operation.loadHotels());
   store.dispatch(UserOperation.checkAuthorization());
 
   ReactDOM.render(
       <Provider store={store}>
-        <App />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </Provider>,
       mainContainer
   );

@@ -1,7 +1,7 @@
 import {connect} from "react-redux";
 import {Operation} from "../../reducer/user/user";
 
-class SignIn extends React.PureComponent {
+class SignIn extends React.Component {
   constructor(props) {
     super(props);
     this._loginField = React.createRef();
@@ -9,17 +9,11 @@ class SignIn extends React.PureComponent {
     this._errorLogin = React.createRef();
     this._errorPassword = React.createRef();
 
-    this.checkDataSignIn = this.checkDataSignIn.bind(this);
-  }
-
-  checkDataSignIn(email, password) {
-    if (email && password) {
-      this.props.signIn({email, password});
-    }
+    this._checkDataSignIn = this._checkDataSignIn.bind(this);
   }
 
   render() {
-    const {_loginField, _passwordField, checkDataSignIn} = this;
+    const {_loginField, _passwordField, _checkDataSignIn} = this;
 
     return <>
       <main className="page__main page__main--login">
@@ -39,7 +33,7 @@ class SignIn extends React.PureComponent {
                 onClick={(evt) => {
                   evt.preventDefault();
                   if (_loginField && _passwordField) {
-                    checkDataSignIn(_loginField.current.value, _passwordField.current.value);
+                    _checkDataSignIn(_loginField.current.value, _passwordField.current.value);
                   }
                 }}>Sign in</button>
             </form>
@@ -54,6 +48,12 @@ class SignIn extends React.PureComponent {
         </div>
       </main>
     </>;
+  }
+
+  _checkDataSignIn(email, password) {
+    if (email && password) {
+      this.props.signIn({email, password});
+    }
   }
 }
 

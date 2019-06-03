@@ -4,5 +4,10 @@ exports[`Test MainMap test renderer 1`] = `
 <section
   className="cities__map map"
   id="map"
+  style={
+    Object {
+      "height": "500px",
+    }
+  }
 />
 `;

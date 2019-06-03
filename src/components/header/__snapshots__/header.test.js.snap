@@ -56,7 +56,8 @@ Array [
         >
           <a
             className="header__logo-link"
-            href="main.html"
+            href="/"
+            onClick={[Function]}
           >
             <img
               alt="6 cities logo"
@@ -77,19 +78,11 @@ Array [
               className="header__nav-item user"
             >
               <a
-                className="header__nav-link header__nav-link--profile"
-                href="#"
+                className="header__login"
+                href="/login"
+                onClick={[Function]}
               >
-                <div
-                  className="header__avatar-wrapper user__avatar-wrapper"
-                >
-                  <img />
-                </div>
-                <span
-                  className="header__user-name user__name"
-                >
-                  Oliver.conner@gmail.com
-                </span>
+                Sign in
               </a>
             </li>
           </ul>
