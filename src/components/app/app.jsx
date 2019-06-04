@@ -13,77 +13,59 @@ import SignIn from '../sign-in/sign-in';
 import withActiveCard from '../../hocs/with-active-card/with-active-card';
 
 const WrapperMainPage = withActiveCard(MainPage);
+const WrapperOffer = withActiveCard(Offer);
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
+const App = (props) => {
+  const {
+    onSetActiveCity,
+    cities,
+    selectCity,
+    isAuthorizationRequired,
+    user,
+    hotels,
+  } = props;
 
-    this.state = {
-      page: null
-    };
-  }
+  return <>
+    <Header isAuthorizationRequired={isAuthorizationRequired} user={user} />
+    <Switch>
+      <Route exact path="/" render={() => {
+        return <WrapperMainPage
+          isAuthorizationRequired={isAuthorizationRequired}
+          onSetActiveCity={onSetActiveCity}
+          city={selectCity || cities[0]}
+          cities={cities}
+        />;
+      }} />
 
-  render() {
-    const {
-      setActiveCity,
-      cities,
-      selectCity,
-      isAuthorizationRequired,
-      user,
-      hotels,
-    } = this.props;
+      <Route path="/offer/:id" render={() => {
+        return <WrapperOffer isAuthorizationRequired={isAuthorizationRequired} offers={hotels} />;
+      }} />
 
-    return <>
-      <Header isAuthorizationRequired={isAuthorizationRequired} user={user} />
-      <Switch>
-        <Route exact path="/" render={() => {
-          return <WrapperMainPage
-            isAuthorizationRequired={isAuthorizationRequired}
-            setActiveCity={setActiveCity}
-            city={selectCity || cities[0]}
-            cities={cities}
-          />;
-        }} />
+      <Route path="/favorites" render={() => {
+        if (isAuthorizationRequired !== null && !isAuthorizationRequired) {
+          return <Redirect to="/login" />;
+        }
 
-        <Route path="/offer/:id" render={() => {
-          return <Offer isAuthorizationRequired={isAuthorizationRequired} offers={hotels} />;
-        }} />
+        return <Favorites />;
+      }} />
 
-        <Route path="/favorites" render={() => {
-          if (isAuthorizationRequired === null && !isAuthorizationRequired) {
-            this.setState({
-              page: `/favorites`
-            });
-            return <Redirect to="/login" />;
-          }
+      <Route exact path="/login" render={() => {
+        if (isAuthorizationRequired === null) {
+          return null;
+        }
 
-          return <Favorites />;
-        }} />
+        if (isAuthorizationRequired) {
+          return <Redirect to="/" />;
+        }
 
-        <Route exact path="/login" render={() => {
-          if (isAuthorizationRequired === null) {
-            return null;
-          }
-
-          if (isAuthorizationRequired) {
-            const {page} = this.state;
-
-            this.setState({
-              page: null
-            });
-
-            return <Redirect to={page} />;
-          }
-
-          return <SignIn isAuthorizationRequired={isAuthorizationRequired} />;
-        }} />
-      </Switch>
-    </>;
-  }
-}
+        return <SignIn isAuthorizationRequired={isAuthorizationRequired} />;
+      }} />
+    </Switch>
+  </>;
+};
 
 App.propTypes = {
-  setActiveCity: propTypes.func.isRequired,
+  onSetActiveCity: propTypes.func.isRequired,
   user: propTypes.shape({
     avatarUrl: propTypes.string,
     email: propTypes.string,
@@ -139,7 +121,7 @@ const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setActiveCity: (cityName) => {
+  onSetActiveCity: (cityName) => {
     dispatch(ActionCreator.setSelectCity(cityName));
   },
 });

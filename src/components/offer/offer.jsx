@@ -2,63 +2,58 @@ import PlaceCard from '../place-card/place-card';
 import MainMap from '../main-map/main-map';
 
 import {connect} from 'react-redux';
+import moment from 'moment';
 import {Operation} from "../../reducer/data/data";
 import {getComments} from "../../reducer/data/selectors";
 
-import withCityMap from '../../hocs/with-city-map/with-city-map';
-
-const WrapperMainMap = withCityMap(MainMap);
-
-const FIVE_STARS_RATE = 5 / 100;
+const COUNT_RATE_STARS = 5;
+const FIVE_STARS_RATE = COUNT_RATE_STARS / 100;
 const MIN_COMMENT_LEN = 50;
 const MAX_COMMENT_LEN = 300;
 
+const MAX_COUNT_OTHER_PLACES = 3;
+const MAX_COUNT_OFFER_IMAGES = 6;
+const MAX_COUNT_OFFER_COMMENTS = 10;
+
+const FavoriteStatus = {
+  ADD: 1,
+  REMOVE: 0,
+};
+
 class Offer extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.id = location.pathname.split(`/`)[2];
-
-    this._commentForm = React.createRef();
-    this._commentField = React.createRef();
-    this._ratingList = React.createRef();
-    this._commentBtn = React.createRef();
-
-    this.text = null;
-    this.rating = null;
-
-    this._checkDataFormValid = this._checkDataFormValid.bind(this);
-    this._commentPost = this._commentPost.bind(this);
-    this._commentPostResolve = this._commentPostResolve.bind(this);
-    this._commentPostReject = this._commentPostReject.bind(this);
-
-    this.props.loadHotelComments(this.id);
+  componentWillMount() {
+    this._init();
   }
 
   render() {
-    const {offers, isAuthorizationRequired, addHotelInFavorite} = this.props;
+    const {
+      offers,
+      isAuthorizationRequired,
+      onAddHotelInFavorite,
+      onSetActionCard
+    } = this.props;
     let {comments} = this.props;
-    let offer = {
-      images: []
-    };
+    let offer = {};
     let otherPlaces = [];
+
+    if (offers.length === 0) {
+      return null;
+    }
 
     if (!comments) {
       comments = [];
     }
 
-    if (offers) {
-      offer = offers.find((it) => it.id === +this.id);
-      otherPlaces = offers.filter(
-          (it) => it !== offer && it.city.name === offer.city.name
-      ).slice(0, 3);
-    }
+    offer = offers.find((it) => it.id === +this.id);
+    otherPlaces = offers.filter(
+        (it) => it !== offer && it.city.name === offer.city.name
+    ).slice(0, MAX_COUNT_OTHER_PLACES);
 
     return <main className="page__main page__main--property">
       <section className="property">
         <div className="property__gallery-container container">
           <div className="property__gallery">
-            {offer.images.slice(0, 6).map((it, idx) => {
+            {offer.images.slice(0, MAX_COUNT_OFFER_IMAGES).map((it, idx) => {
               return <div key={idx} className="property__image-wrapper">
                 <img className="property__image" src={it} alt="Photo studio" />
               </div>;
@@ -78,7 +73,10 @@ class Offer extends React.Component {
                 type="button"
                 onClick={() => {
                   if (isAuthorizationRequired) {
-                    addHotelInFavorite(offer.id, offer.isFavorite ? 0 : 1);
+                    onAddHotelInFavorite(
+                        offer.id,
+                        FavoriteStatus[offer.isFavorite ? `REMOVE` : `ADD`]
+                    );
                   } else {
                     history.pushState(null, null, `/login`);
                     location.reload();
@@ -140,7 +138,7 @@ class Offer extends React.Component {
               <ul className="reviews__list">
                 {comments
                   .sort((a, b) => +new Date(b.date) - +new Date(a.date))
-                  .slice(0, 10)
+                  .slice(0, MAX_COUNT_OFFER_COMMENTS)
                   .map((it, idx) => {
                     return <li key={idx} className="reviews__item">
                       <div className="reviews__user user">
@@ -157,7 +155,7 @@ class Offer extends React.Component {
                           </div>
                         </div>
                         <p className="reviews__text">{it.comment}</p>
-                        <time className="reviews__time" dateTime={it.date}>{it.date}</time>
+                        <time className="reviews__time" dateTime={it.date}>{moment(it.date).format(`MMMM YYYY`)}</time>
                       </div>
                     </li>;
                   })}
@@ -165,7 +163,7 @@ class Offer extends React.Component {
               {!isAuthorizationRequired ? `` :
                 <form
                   ref={this._commentForm}
-                  onSubmit={this._commentPost}
+                  onSubmit={this._handleFormSubmit}
                   className="reviews__form form"
                   action="#"
                   method="post">
@@ -173,8 +171,8 @@ class Offer extends React.Component {
                   <div
                     ref={this._ratingList}
                     className="reviews__rating-form form__rating"
-                    onChange={this._checkDataFormValid}>
-                    {Array(5).fill(null).map((it, idx, arr) => {
+                    onChange={this._handleFormChange}>
+                    {Array(COUNT_RATE_STARS).fill(null).map((it, idx, arr) => {
                       const rate = arr.length - idx;
                       return <>
                         <input className="form__rating-input visually-hidden" name="rating" value={rate} id={`${rate}-stars`} type="radio" />
@@ -188,7 +186,7 @@ class Offer extends React.Component {
                   </div>
                   <textarea
                     ref={this._commentField}
-                    onChange={this._checkDataFormValid}
+                    onChange={this._handleFormChange}
                     className="reviews__textarea form__textarea"
                     id="review"
                     name="review"
@@ -200,13 +198,14 @@ class Offer extends React.Component {
                     <button
                       ref={this._commentBtn}
                       className="reviews__submit form__submit button"
-                      type="submit">Submit</button>
+                      type="submit"
+                      disabled="true">Submit</button>
                   </div>
                 </form>}
             </section>
           </div>
         </div>
-        <WrapperMainMap
+        <MainMap
           mapPropClass={`property__map`}
           selectedCity={offer.city.name}
           offers={otherPlaces}
@@ -220,17 +219,34 @@ class Offer extends React.Component {
               return <PlaceCard
                 key={idx}
                 data={it}
-                onImgClick={() => {
-                  // setActionCard(it);
+                onSetActionCard={() => {
+                  onSetActionCard(it);
                 }}
-                // onImgMouseOver={() => {}}
-                // onImgMouseOut={() => {}}
               />;
             })}
           </div>
         </section>
       </div>
     </main>;
+  }
+
+  _init() {
+    this.id = location.pathname.split(`/`)[2];
+
+    this._commentForm = React.createRef();
+    this._commentField = React.createRef();
+    this._ratingList = React.createRef();
+    this._commentBtn = React.createRef();
+
+    this.text = null;
+    this.rating = null;
+
+    this._handleFormChange = this._handleFormChange.bind(this);
+    this._handleFormSubmit = this._handleFormSubmit.bind(this);
+    this._commentPostResolve = this._commentPostResolve.bind(this);
+    this._commentPostReject = this._commentPostReject.bind(this);
+
+    this.props.loadHotelComments(this.id);
   }
 
   _commentPostResolve() {
@@ -243,7 +259,7 @@ class Offer extends React.Component {
     this._setErrorForm();
   }
 
-  _commentPost(evt) {
+  _handleFormSubmit(evt) {
     evt.preventDefault();
     this.props.hotelCommentPost(
         this.id,
@@ -256,7 +272,7 @@ class Offer extends React.Component {
     this._disabledFormComment();
   }
 
-  _checkDataFormValid() {
+  _handleFormChange() {
     if (!this._commentField || !this._ratingList) {
       return;
     }
@@ -292,12 +308,6 @@ class Offer extends React.Component {
   _enabledFormComment() {
     this._commentBtn.current.disabled = false;
     this._commentField.current.disabled = false;
-  }
-
-  componentDidMount() {
-    if (this.props.isAuthorizationRequired) {
-      this._checkDataFormValid();
-    }
   }
 }
 
@@ -339,7 +349,8 @@ const propTypeOffer = propTypes.shape({
 Offer.propTypes = {
   loadHotelComments: propTypes.func.isRequired,
   hotelCommentPost: propTypes.func.isRequired,
-  addHotelInFavorite: propTypes.func.isRequired,
+  onAddHotelInFavorite: propTypes.func.isRequired,
+  onSetActionCard: propTypes.func.isRequired,
   offers: propTypes.arrayOf(propTypeOffer),
   comments: propTypes.arrayOf(propTypes.shape({
     comment: propTypes.string,
@@ -367,7 +378,7 @@ const mapDispatchToProps = (dispatch) => ({
   hotelCommentPost: (hotelId, data, resolve, reject) => {
     dispatch(Operation.hotelCommentPost(hotelId, data, resolve, reject));
   },
-  addHotelInFavorite: (hotelId, status) => {
+  onAddHotelInFavorite: (hotelId, status) => {
     dispatch(Operation.addHotelInFavorite(hotelId, status));
   },
 });

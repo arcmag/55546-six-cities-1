@@ -1,19 +1,21 @@
-// import renderer from 'react-test-renderer';
+import renderer from 'react-test-renderer';
 
-// import PlaceList from './place-list';
+import PlaceList from './place-list';
 
-// const mock = {
-//   selectedCity: `Paris`,
-//   offers: []
-// };
+const mock = {
+  selectedCity: `Paris`,
+  offers: []
+};
 
 describe(`Test PlaceList`, () => {
   it(`Test PlaceList renderer`, () => {
-    // const tree = renderer.create(<PlaceList
-    //   renderOffers={jest.fn()}
-    //   offers={mock.offers}
-    //   selectedCity={mock.selectedCity}
-    // />).toJSON();
-    // expect(tree).toMatchSnapshot();
+    const tree = renderer.create(<PlaceList
+      renderOffers={jest.fn()}
+      onAddHotelInFavorite={jest.fn()}
+      onSetActionCard={jest.fn()}
+      offers={mock.offers}
+      selectedCity={mock.selectedCity}
+    />).toJSON();
+    expect(tree).toMatchSnapshot();
   });
 });

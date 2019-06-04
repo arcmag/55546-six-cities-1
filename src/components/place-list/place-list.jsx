@@ -29,26 +29,22 @@ class PlaceList extends React.Component {
   }
 
   _renderOffers() {
-    const {addHotelInFavorite, setActionCard, clearActionCard} = this.props;
+    const {onAddHotelInFavorite, onSetActionCard} = this.props;
+
     return this._getActiveOffers().map((it, idx) => <PlaceCard
       key={idx}
       data={it}
-      onImgClick={() => {
-        setActionCard(it);
+      onSetActionCard={() => {
+        onSetActionCard(it);
       }}
-      onImgMouseOver={() => {
-        setActionCard(it);
-      }}
-      onImgMouseOut={clearActionCard}
-      addHotelInFavorite={addHotelInFavorite}
+      onAddHotelInFavorite={onAddHotelInFavorite}
     />);
   }
 }
 
 PlaceList.propTypes = {
-  addHotelInFavorite: propTypes.func.isRequired,
-  setActionCard: propTypes.func.isRequired,
-  clearActionCard: propTypes.func.isRequired,
+  onAddHotelInFavorite: propTypes.func.isRequired,
+  onSetActionCard: propTypes.func.isRequired,
   offers: propTypes.arrayOf(propTypes.shape({
     bedrooms: propTypes.number,
     city: propTypes.shape({

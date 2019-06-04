@@ -1,7 +1,7 @@
 import PlaceCard from '../place-card/place-card';
 
 const FavoritesList = (props) => {
-  const {offersCities, setActionCard, clearActionCard} = props;
+  const {offersCities, onSetActionCard} = props;
 
   return <ul className="favorites__list">
     {offersCities.map((it, idx) => {
@@ -20,11 +20,7 @@ const FavoritesList = (props) => {
             return <PlaceCard
               key={idxCard}
               data={card}
-              onImgClick={setActionCard}
-              onImgMouseOver={() => {
-                setActionCard(it);
-              }}
-              onImgMouseOut={clearActionCard}
+              onSetActionCard={onSetActionCard}
             />;
           })}
         </div>
@@ -34,9 +30,46 @@ const FavoritesList = (props) => {
 };
 
 FavoritesList.propTypes = {
-  setActionCard: propTypes.func.isRequired,
-  clearActionCard: propTypes.func.isRequired,
-  offersCities: propTypes.array.isRequired,
+  onSetActionCard: propTypes.func.isRequired,
+  offersCities: propTypes.arrayOf(
+      propTypes.string,
+      propTypes.arrayOf(
+          propTypes.shape({
+            bedrooms: propTypes.number,
+            city: propTypes.shape({
+              name: propTypes.string,
+              location: propTypes.shape({
+                latitude: propTypes.number,
+                longitude: propTypes.number,
+                zoom: propTypes.number
+              })
+            }),
+            description: propTypes.string,
+            goods: propTypes.arrayOf(propTypes.string),
+            host: propTypes.shape({
+              avatarUrl: propTypes.string,
+              id: propTypes.number,
+              isPro: propTypes.bool,
+              name: propTypes.string
+            }),
+            id: propTypes.number,
+            images: propTypes.arrayOf(propTypes.string),
+            isFavorite: propTypes.bool,
+            isPremium: propTypes.bool,
+            location: propTypes.shape({
+              latitude: propTypes.number,
+              longitude: propTypes.number,
+              zoom: propTypes.number
+            }),
+            maxAdults: propTypes.number,
+            previewImage: propTypes.string,
+            price: propTypes.number,
+            rating: propTypes.number,
+            title: propTypes.string,
+            type: propTypes.string
+          })
+      )
+  )
 };
 
 export default FavoritesList;

@@ -2,6 +2,11 @@ import {Link} from "react-router-dom";
 
 const FIVE_STARS_RATE = 5 / 100;
 
+const FavoriteStatus = {
+  ADD: 1,
+  REMOVE: 0,
+};
+
 const PlaceCard = (props) => {
   const {
     id,
@@ -15,10 +20,8 @@ const PlaceCard = (props) => {
   } = props.data;
 
   const {
-    // onImgMouseOver,
-    // onImgMouseOut,
-    onImgClick,
-    addHotelInFavorite
+    onSetActionCard,
+    onAddHotelInFavorite
   } = props;
 
   return <article
@@ -29,9 +32,7 @@ const PlaceCard = (props) => {
 
     <div className="cities__image-wrapper place-card__image-wrapper">
       <a href="#"
-        // onMouseOver={onImgMouseOver}
-        // onMouseOut={onImgMouseOut}
-        onClick={onImgClick}
+        onClick={onSetActionCard}
       >
         <img className="place-card__image" src={previewImage} width="260" height="200" />
       </a>
@@ -42,11 +43,11 @@ const PlaceCard = (props) => {
           <b className="place-card__price-value">&euro;{price}</b>
           <span className="place-card__price-text">&#47;&nbsp;night</span>
         </div>
-        {addHotelInFavorite ? <button
+        {onAddHotelInFavorite ? <button
           className={`place-card__bookmark-button button ${isFavorite ? `place-card__bookmark-button--active` : ``}`}
           type="button"
           onClick={() => {
-            addHotelInFavorite(id, isFavorite ? 0 : 1);
+            onAddHotelInFavorite(id, FavoriteStatus[isFavorite ? `REMOVE` : `ADD`]);
           }}
         >
           <svg className="place-card__bookmark-icon" width="18" height="19">
@@ -105,10 +106,8 @@ PlaceCard.propTypes = {
     title: propTypes.string,
     type: propTypes.string,
   }),
-  addHotelInFavorite: propTypes.any,
-  onImgClick: propTypes.func.isRequired,
-  onImgMouseOver: propTypes.func.isRequired,
-  onImgMouseOut: propTypes.func.isRequired
+  onAddHotelInFavorite: propTypes.any,
+  onSetActionCard: propTypes.func,
 };
 
 export default PlaceCard;

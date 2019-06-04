@@ -1,12 +1,12 @@
 const CitiesList = (props) => {
-  const {selectedCity, cities, onLinkClick} = props;
+  const {selectedCity, cities, onSetActiveCity} = props;
 
   return <div className="cities tabs">
     <section className="locations container">
       <ul className="locations__list tabs__list">
         {cities.map((it, idx) => <li key={idx} className="locations__item">
           <a onClick={() => {
-            onLinkClick(it);
+            onSetActiveCity(it);
           }} className={
             `locations__item-link tabs__item ${it === selectedCity ? `tabs__item--active` : ``}`
           } href="#">
@@ -20,7 +20,7 @@ const CitiesList = (props) => {
 
 CitiesList.propTypes = {
   cities: propTypes.array.isRequired,
-  onLinkClick: propTypes.func.isRequired,
+  onSetActiveCity: propTypes.func.isRequired,
   selectedCity: propTypes.any
 };
 

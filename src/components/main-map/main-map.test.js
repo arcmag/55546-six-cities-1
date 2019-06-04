@@ -6,32 +6,72 @@ const mock = {
   selectedCity: `Paris`,
   offers: [
     {
-      title: `Beautiful & luxurious apartment at great location`,
-      src: `img/apartment-01.jpg`,
+      bedrooms: 1,
       city: {
-        name: `Paris`,
-        coordinate: [48.852969, 2.351074]
+        name: ``,
+        location: {
+          latitude: 0,
+          longitude: 0,
+          zoom: 10,
+        },
       },
-      price: 120,
-      rating: 4.7,
-      type: `Apartment`,
-      coordinate: [48.852969123654, 2.351074654123],
-      isChecked: false,
-      isPremium: true
+      description: ``,
+      goods: [],
+      host: {
+        avatarUrl: ``,
+        id: 1,
+        isPro: true,
+        name: ``,
+      },
+      id: 1,
+      images: [],
+      isFavorite: false,
+      isPremium: false,
+      location: {
+        latitude: 0,
+        longitude: 0,
+        zoom: 10,
+      },
+      maxAdults: 1,
+      previewImage: ``,
+      price: 0,
+      rating: 5,
+      title: ``,
+      type: ``,
     },
     {
-      title: `Beautiful & luxurious apartment at great location`,
-      src: `img/apartment-01.jpg`,
+      bedrooms: 1,
       city: {
-        name: `Paris`,
-        coordinate: [48.852969, 2.351074]
+        name: ``,
+        location: {
+          latitude: 0,
+          longitude: 0,
+          zoom: 10,
+        },
       },
-      price: 120,
-      rating: 4.7,
-      type: `Apartment`,
-      coordinate: [48.852969123654, 2.351074654123],
-      isChecked: false,
-      isPremium: true
+      description: ``,
+      goods: [],
+      host: {
+        avatarUrl: ``,
+        id: 1,
+        isPro: true,
+        name: ``,
+      },
+      id: 1,
+      images: [],
+      isFavorite: false,
+      isPremium: false,
+      location: {
+        latitude: 0,
+        longitude: 0,
+        zoom: 10,
+      },
+      maxAdults: 1,
+      previewImage: ``,
+      price: 0,
+      rating: 5,
+      title: ``,
+      type: ``,
     }
   ]
 };

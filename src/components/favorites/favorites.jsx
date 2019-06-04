@@ -6,7 +6,7 @@ import {getHotels} from "../../reducer/data/selectors";
 import withActiveCard from '../../hocs/with-active-card/with-active-card';
 const WrapperFavoritesList = withActiveCard(FavoritesList);
 
-class Favorites extends React.Component {
+class Favorites extends React.PureComponent {
   render() {
     const offersCities = this._getCardsByCities();
 

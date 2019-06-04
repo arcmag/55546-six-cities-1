@@ -1,0 +1,83 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test PlaceCard Test PlaceCard renderer 1`] = `
+<article
+  className="cities__place-card place-card"
+>
+  
+  <div
+    className="cities__image-wrapper place-card__image-wrapper"
+  >
+    <a
+      href="#"
+    >
+      <img
+        className="place-card__image"
+        height="200"
+        src=""
+        width="260"
+      />
+    </a>
+  </div>
+  <div
+    className="place-card__info"
+  >
+    <div
+      className="place-card__price-wrapper"
+    >
+      <div
+        className="place-card__price"
+      >
+        <b
+          className="place-card__price-value"
+        >
+          €
+          0
+        </b>
+        <span
+          className="place-card__price-text"
+        >
+          / night
+        </span>
+      </div>
+      
+    </div>
+    <div
+      className="place-card__rating rating"
+    >
+      <div
+        className="place-card__stars rating__stars"
+      >
+        <span
+          style={
+            Object {
+              "width": "100%",
+            }
+          }
+        />
+        <span
+          className="visually-hidden"
+        >
+          Rating
+        </span>
+      </div>
+    </div>
+    <h2
+      className="place-card__name"
+    >
+      <a
+        className="header__logo-link"
+        href="/offer/1"
+        onClick={[Function]}
+      >
+        
+      </a>
+    </h2>
+    <p
+      className="place-card__type"
+    >
+      
+    </p>
+  </div>
+</article>
+`;
