@@ -33,7 +33,7 @@ class Offer extends React.Component {
       onSetActionCard
     } = this.props;
     let {comments} = this.props;
-    let offer = {};
+    let offer = null;
     let otherPlaces = [];
 
     if (offers.length === 0) {
@@ -45,6 +45,16 @@ class Offer extends React.Component {
     }
 
     offer = offers.find((it) => it.id === +this.id);
+
+    if (!offer) {
+      offer = {
+        host: {},
+        city: {},
+        images: [],
+        goods: [],
+      };
+    }
+
     otherPlaces = offers.filter(
         (it) => it !== offer && it.city.name === offer.city.name
     ).slice(0, MAX_COUNT_OTHER_PLACES);
@@ -174,14 +184,16 @@ class Offer extends React.Component {
                     onChange={this._handleFormChange}>
                     {Array(COUNT_RATE_STARS).fill(null).map((it, idx, arr) => {
                       const rate = arr.length - idx;
-                      return <>
+                      /* eslint-disable */
+                      return <React.Fragment key={idx}>
                         <input className="form__rating-input visually-hidden" name="rating" value={rate} id={`${rate}-stars`} type="radio" />
                         <label htmlFor={`${rate}-stars`} className="reviews__rating-label form__rating-label" title="perfect">
                           <svg className="form__star-image" width="37" height="33">
                             <use xlinkHref="#icon-star"></use>
                           </svg>
                         </label>
-                      </>;
+                      </React.Fragment>;
+                      /* eslint-enable */
                     })}
                   </div>
                   <textarea
@@ -199,7 +211,7 @@ class Offer extends React.Component {
                       ref={this._commentBtn}
                       className="reviews__submit form__submit button"
                       type="submit"
-                      disabled="true">Submit</button>
+                      disabled="disabled">Submit</button>
                   </div>
                 </form>}
             </section>

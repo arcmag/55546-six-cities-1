@@ -52,10 +52,27 @@ describe(`e2e test PlaceCard`, () => {
             onSetActionCard={() => {
               stateActiveCard = dataMock;
             }}
+            onAddHotelInFavorite={jest.fn()}
           />
         </BrowserRouter>);
     const cardImgLink = tree.find(`.place-card__image-wrapper a`);
     cardImgLink.simulate(`click`);
     expect(stateActiveCard).toEqual(dataMock);
+  });
+
+  it(`test button favorite click`, () => {
+    const onAddHotelInFavoriteFn = jest.fn();
+    const tree = mount(
+        <BrowserRouter>
+          <PlaceCard
+            data={dataMock}
+            onSetActionCard={jest.fn()}
+            onAddHotelInFavorite={onAddHotelInFavoriteFn}
+          />
+        </BrowserRouter>);
+
+    const bookmarkButton = tree.find(`.place-card__bookmark-button`);
+    bookmarkButton.simulate(`click`);
+    expect(onAddHotelInFavoriteFn).toHaveBeenCalledTimes(1);
   });
 });
