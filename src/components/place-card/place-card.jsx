@@ -1,6 +1,13 @@
 import {Link} from "react-router-dom";
 
+import propTypesData from '../../prop-types';
+
 const FIVE_STARS_RATE = 5 / 100;
+
+const FavoriteStatus = {
+  ADD: 1,
+  REMOVE: 0,
+};
 
 const PlaceCard = (props) => {
   const {
@@ -15,10 +22,8 @@ const PlaceCard = (props) => {
   } = props.data;
 
   const {
-    // onImgMouseOver,
-    // onImgMouseOut,
-    onImgClick,
-    addHotelInFavorite
+    onSetActionCard,
+    onAddHotelInFavorite
   } = props;
 
   return <article
@@ -28,11 +33,7 @@ const PlaceCard = (props) => {
     </div> : ``}
 
     <div className="cities__image-wrapper place-card__image-wrapper">
-      <a href="#"
-        // onMouseOver={onImgMouseOver}
-        // onMouseOut={onImgMouseOut}
-        onClick={onImgClick}
-      >
+      <a href="#" onClick={onSetActionCard}>
         <img className="place-card__image" src={previewImage} width="260" height="200" />
       </a>
     </div>
@@ -42,11 +43,11 @@ const PlaceCard = (props) => {
           <b className="place-card__price-value">&euro;{price}</b>
           <span className="place-card__price-text">&#47;&nbsp;night</span>
         </div>
-        {addHotelInFavorite ? <button
+        {onAddHotelInFavorite ? <button
           className={`place-card__bookmark-button button ${isFavorite ? `place-card__bookmark-button--active` : ``}`}
           type="button"
           onClick={() => {
-            addHotelInFavorite(id, isFavorite ? 0 : 1);
+            onAddHotelInFavorite(id, FavoriteStatus[isFavorite ? `REMOVE` : `ADD`]);
           }}
         >
           <svg className="place-card__bookmark-icon" width="18" height="19">
@@ -71,44 +72,9 @@ const PlaceCard = (props) => {
 };
 
 PlaceCard.propTypes = {
-  data: propTypes.shape({
-    bedrooms: propTypes.number,
-    city: propTypes.shape({
-      name: propTypes.string,
-      location: propTypes.shape({
-        latitude: propTypes.number,
-        longitude: propTypes.number,
-        zoom: propTypes.number,
-      }),
-    }),
-    description: propTypes.string,
-    goods: propTypes.array,
-    host: propTypes.shape({
-      avatarUrl: propTypes.string,
-      id: propTypes.number,
-      isPro: propTypes.bool,
-      name: propTypes.string,
-    }),
-    id: propTypes.number,
-    images: propTypes.array,
-    isFavorite: propTypes.bool,
-    isPremium: propTypes.bool,
-    location: propTypes.shape({
-      latitude: propTypes.number,
-      longitude: propTypes.number,
-      zoom: propTypes.number,
-    }),
-    maxAdults: propTypes.number,
-    previewImage: propTypes.string,
-    price: propTypes.number,
-    rating: propTypes.number,
-    title: propTypes.string,
-    type: propTypes.string,
-  }),
-  addHotelInFavorite: propTypes.any,
-  onImgClick: propTypes.func.isRequired,
-  onImgMouseOver: propTypes.func.isRequired,
-  onImgMouseOut: propTypes.func.isRequired
+  data: propTypesData.offer.isRequired,
+  onAddHotelInFavorite: propTypes.any,
+  onSetActionCard: propTypes.func,
 };
 
 export default PlaceCard;

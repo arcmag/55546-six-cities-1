@@ -7,29 +7,21 @@ const withActiveCard = (Component) => {
         actionCard: null
       };
 
-      this._setActionCard = this._setActionCard.bind(this);
-      this._clearActionCard = this._clearActionCard.bind(this);
-    }
-
-    _setActionCard(card) {
-      this.setState({
-        actionCard: card
-      });
-    }
-
-    _clearActionCard() {
-      this.setState({
-        actionCard: null
-      });
+      this._onSetActionCard = this._onSetActionCard.bind(this);
     }
 
     render() {
       return <Component
         actionCard={this.state.actionCard}
-        setActionCard={this._setActionCard}
-        clearActionCard={this._clearActionCard}
+        onSetActionCard={this._onSetActionCard}
         {...this.props}
       />;
+    }
+
+    _onSetActionCard(card) {
+      this.setState({
+        actionCard: card
+      });
     }
   }
 

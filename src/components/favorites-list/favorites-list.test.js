@@ -9,9 +9,8 @@ const mock = {
 describe(`Test FavoritesList`, () => {
   it(`test renderer`, () => {
     const tree = renderer.create(<FavoritesList
-      setActionCard={jest.fn()}
-      clearActionCard={jest.fn()}
-      offersCities={mock.cities}
+      onSetActionCard={jest.fn()}
+      offers={mock.cities}
     />).toJSON();
     expect(tree).toMatchSnapshot();
   });

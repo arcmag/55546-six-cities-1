@@ -1,12 +1,14 @@
 import FavoritesList from '../favorites-list/favorites-list';
 
+import propTypesData from '../../prop-types';
+
 import {connect} from 'react-redux';
 import {getHotels} from "../../reducer/data/selectors";
 
 import withActiveCard from '../../hocs/with-active-card/with-active-card';
 const WrapperFavoritesList = withActiveCard(FavoritesList);
 
-class Favorites extends React.Component {
+class Favorites extends React.PureComponent {
   render() {
     const offersCities = this._getCardsByCities();
 
@@ -22,9 +24,25 @@ class Favorites extends React.Component {
           </section> :
           <section className="favorites">
             <h1 className="favorites__title">Saved listing</h1>
-            <WrapperFavoritesList offersCities={offersCities} />
-          </section>
-        }
+            {offersCities.map((data, idx) => {
+              const [city, offers] = data;
+
+              return <ul className="favorites__list" key={idx}>
+                <li key={idx} className="favorites__locations-items">
+                  <div className="favorites__locations locations locations--current">
+                    <div className="locations__item">
+                      <a className="locations__item-link" href="#">
+                        <span>{city}</span>
+                      </a>
+                    </div>
+                  </div>
+                  <div className="favorites__places">
+                    <WrapperFavoritesList offers={offers} />
+                  </div>
+                </li>
+              </ul>;
+            })}
+          </section>}
       </div>
     </main>;
   }
@@ -45,40 +63,7 @@ class Favorites extends React.Component {
 }
 
 Favorites.propTypes = {
-  offers: propTypes.arrayOf(propTypes.shape({
-    bedrooms: propTypes.number,
-    city: propTypes.shape({
-      name: propTypes.string,
-      location: propTypes.shape({
-        latitude: propTypes.number,
-        longitude: propTypes.number,
-        zoom: propTypes.number,
-      }),
-    }),
-    description: propTypes.string,
-    goods: propTypes.array,
-    host: propTypes.shape({
-      avatarUrl: propTypes.string,
-      id: propTypes.number,
-      isPro: propTypes.bool,
-      name: propTypes.string,
-    }),
-    id: propTypes.number,
-    images: propTypes.array,
-    isFavorite: propTypes.bool,
-    isPremium: propTypes.bool,
-    location: propTypes.shape({
-      latitude: propTypes.number,
-      longitude: propTypes.number,
-      zoom: propTypes.number,
-    }),
-    maxAdults: propTypes.number,
-    previewImage: propTypes.string,
-    price: propTypes.number,
-    rating: propTypes.number,
-    title: propTypes.string,
-    type: propTypes.string,
-  })),
+  offers: propTypes.arrayOf(propTypesData.offer).isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {

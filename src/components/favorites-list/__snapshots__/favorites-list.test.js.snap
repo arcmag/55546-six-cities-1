@@ -1,7 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Test FavoritesList test renderer 1`] = `
-<ul
-  className="favorites__list"
-/>
-`;
+exports[`Test FavoritesList test renderer 1`] = `null`;

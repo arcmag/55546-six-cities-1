@@ -9,7 +9,6 @@ const MAX_CITY_COUNT = 6;
 const ActionType = {
   LOAD_HOTELS: `LOAD_HOTELS`,
   SORT_HOTELS: `SORT_HOTELS`,
-  ADD_HOTEL_IN_FAVORITE: `ADD_HOTEL_IN_FAVORITE`,
   LOAD_HOTEL_COMMENTS: `LOAD_HOTEL_COMMENTS`,
   HOTEL_COMMENT_POST: `HOTEL_COMMENT_POST`,
   SET_CITIES_LIST: `SET_CITIES_LIST`,
@@ -93,7 +92,7 @@ const ActionCreator = {
     };
   },
   loadHotelComments: (comments) => {
-    const updateComments = comments.map((it) => {
+    const updateComments = comments ? comments.map((it) => {
       return {
         comment: it.comment,
         date: it.date,
@@ -106,7 +105,7 @@ const ActionCreator = {
           name: it.user.name,
         }
       };
-    });
+    }) : [];
 
     return {
       type: ActionType.LOAD_HOTEL_COMMENTS,
@@ -165,18 +164,10 @@ const reducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         hotels: action.payload,
       });
-    case ActionType.ADD_HOTEL_IN_FAVORITE:
-      return Object.assign({}, state, {
-        hotels: action.payload,
-      });
     case ActionType.LOAD_HOTEL_COMMENTS:
       return Object.assign({}, state, {
         comments: action.payload,
       });
-    // case ActionType.HOTEL_COMMENT_POST:
-    //   return Object.assign({}, state, {
-    //     comments: action.payload,
-    //   });
     case ActionType.SET_CITIES_LIST:
       return Object.assign({}, state, {
         cities: action.payload,

@@ -9,11 +9,11 @@ class SignIn extends React.Component {
     this._errorLogin = React.createRef();
     this._errorPassword = React.createRef();
 
-    this._checkDataSignIn = this._checkDataSignIn.bind(this);
+    this._handleButtonSubmit = this._handleButtonSubmit.bind(this);
   }
 
   render() {
-    const {_loginField, _passwordField, _checkDataSignIn} = this;
+    const {_loginField, _passwordField, _handleButtonSubmit} = this;
 
     return <>
       <main className="page__main page__main--login">
@@ -30,12 +30,7 @@ class SignIn extends React.Component {
                 <input ref={_passwordField} className="login__input form__input" type="password" name="password" placeholder="Password" required="" />
               </div>
               <button className="login__submit form__submit button" type="submit"
-                onClick={(evt) => {
-                  evt.preventDefault();
-                  if (_loginField && _passwordField) {
-                    _checkDataSignIn(_loginField.current.value, _passwordField.current.value);
-                  }
-                }}>Sign in</button>
+                onClick={_handleButtonSubmit}>Sign in</button>
             </form>
           </section>
           <section className="locations locations--login locations--current">
@@ -50,9 +45,17 @@ class SignIn extends React.Component {
     </>;
   }
 
-  _checkDataSignIn(email, password) {
-    if (email && password) {
-      this.props.signIn({email, password});
+  _handleButtonSubmit(evt) {
+    evt.preventDefault();
+
+    const {_loginField, _passwordField} = this;
+
+    if (_loginField && _passwordField) {
+      const [email, password] = [_loginField.current.value, _passwordField.current.value];
+
+      if (email && password) {
+        this.props.signIn({email, password});
+      }
     }
   }
 }

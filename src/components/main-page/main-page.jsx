@@ -2,32 +2,30 @@ import CitiesList from '../cities-list/cities-list';
 import PlaceList from '../place-list/place-list';
 import MainMap from '../main-map/main-map';
 
+import propTypesData from '../../prop-types';
+
 import {connect} from 'react-redux';
 import {ActionCreator, Operation} from "../../reducer/data/data";
 import {getHotels} from "../../reducer/data/selectors";
 
-import withCityMap from '../../hocs/with-city-map/with-city-map';
-
-const WrapperMainMap = withCityMap(MainMap);
-
-class MainPage extends React.Component {
+class MainPage extends React.PureComponent {
   constructor(props) {
     super(props);
 
     this._buttonSort = React.createRef();
     this._listSort = React.createRef();
 
-    this._onSortButtonClick = this._onSortButtonClick.bind(this);
-    this._onSortListClick = this._onSortListClick.bind(this);
-    this._onDocumentClick = this._onDocumentClick.bind(this);
+    this._handleSortButtonClick = this._handleSortButtonClick.bind(this);
+    this._handleSortListClick = this._handleSortListClick.bind(this);
+    this._handleDocumentClick = this._handleDocumentClick.bind(this);
   }
 
   render() {
     const {
       _buttonSort,
-      _onSortButtonClick,
+      _handleSortButtonClick,
       _listSort,
-      _onSortListClick,
+      _handleSortListClick,
     } = this;
 
     return <>
@@ -45,7 +43,7 @@ class MainPage extends React.Component {
                   ref={_buttonSort}
                   className="places__sorting-type"
                   tabIndex="0"
-                  onClick={_onSortButtonClick}
+                  onClick={_handleSortButtonClick}
                 >
                   Popular
                   <svg className="places__sorting-arrow" width="7" height="4">
@@ -55,7 +53,7 @@ class MainPage extends React.Component {
                 <ul
                   ref={_listSort}
                   className="places__options places__options--custom"
-                  onClick={_onSortListClick}
+                  onClick={_handleSortListClick}
                 >
                   <li data-sort-offers="default" className="places__option places__option--active" tabIndex="0">Popular</li>
                   <li data-sort-offers="max-price" className="places__option" tabIndex="0">Price: low to high</li>
@@ -80,10 +78,10 @@ class MainPage extends React.Component {
   }
 
   _renderCitiesList() {
-    const {city, cities, setActiveCity} = this.props;
+    const {city, cities, onSetActiveCity} = this.props;
 
     return <CitiesList
-      onLinkClick={setActiveCity}
+      onSetActiveCity={onSetActiveCity}
       selectedCity={city}
       cities={cities}
     />;
@@ -91,7 +89,7 @@ class MainPage extends React.Component {
 
   _renderMainMap() {
     const {city, offers, actionCard} = this.props;
-    return <WrapperMainMap
+    return <MainMap
       actionCard={actionCard}
       selectedCity={city}
       offers={offers}
@@ -99,24 +97,21 @@ class MainPage extends React.Component {
   }
 
   _renderPlaceList() {
-    const {city, offers, addHotelInFavorite, setActionCard, clearActionCard} = this.props;
-
+    const {city, offers, onAddHotelInFavorite, onSetActionCard} = this.props;
     return <PlaceList
-      setActionCard={setActionCard}
-      clearActionCard={clearActionCard}
-
+      onSetActionCard={onSetActionCard}
       selectedCity={city}
       offers={offers}
-      addHotelInFavorite={addHotelInFavorite}
+      onAddHotelInFavorite={onAddHotelInFavorite}
     />;
   }
 
-  _onSortButtonClick() {
+  _handleSortButtonClick() {
     this._openSortList();
-    document.addEventListener(`click`, this._onDocumentClick);
+    document.addEventListener(`click`, this._handleDocumentClick);
   }
 
-  _onSortListClick(evt) {
+  _handleSortListClick(evt) {
     evt.preventDefault();
     const currentItem = evt.target;
     const type = currentItem.dataset.sortOffers;
@@ -136,9 +131,9 @@ class MainPage extends React.Component {
     this.props.sortHotels(type);
   }
 
-  _onDocumentClick() {
+  _handleDocumentClick() {
     this._closeSortList();
-    document.removeEventListener(`click`, this._onDocumentClick);
+    document.removeEventListener(`click`, this._handleDocumentClick);
   }
 
   _openSortList() {
@@ -150,50 +145,14 @@ class MainPage extends React.Component {
   }
 }
 
-const propTypeOffer = propTypes.shape({
-  bedrooms: propTypes.number,
-  city: propTypes.shape({
-    name: propTypes.string,
-    location: propTypes.shape({
-      latitude: propTypes.number,
-      longitude: propTypes.number,
-      zoom: propTypes.number,
-    }),
-  }),
-  description: propTypes.string,
-  goods: propTypes.array,
-  host: propTypes.shape({
-    avatarUrl: propTypes.string,
-    id: propTypes.number,
-    isPro: propTypes.bool,
-    name: propTypes.string,
-  }),
-  id: propTypes.number,
-  images: propTypes.array,
-  isFavorite: propTypes.bool,
-  isPremium: propTypes.bool,
-  location: propTypes.shape({
-    latitude: propTypes.number,
-    longitude: propTypes.number,
-    zoom: propTypes.number,
-  }),
-  maxAdults: propTypes.number,
-  previewImage: propTypes.string,
-  price: propTypes.number,
-  rating: propTypes.number,
-  title: propTypes.string,
-  type: propTypes.string,
-});
-
 MainPage.propTypes = {
-  setActiveCity: propTypes.func.isRequired,
+  onSetActiveCity: propTypes.func.isRequired,
   sortHotels: propTypes.func.isRequired,
-  addHotelInFavorite: propTypes.func.isRequired,
-  setActionCard: propTypes.func.isRequired,
-  clearActionCard: propTypes.func.isRequired,
-  offers: propTypes.arrayOf(propTypeOffer),
-  actionCard: propTypeOffer,
-  cities: propTypes.array.isRequired,
+  onAddHotelInFavorite: propTypes.func.isRequired,
+  onSetActionCard: propTypes.func.isRequired,
+  offers: propTypes.arrayOf(propTypesData.offer).isRequired,
+  cities: propTypes.arrayOf(propTypes.string).isRequired,
+  actionCard: propTypesData.offer,
   city: propTypes.any,
   isAuthorizationRequired: propTypes.any,
 };
@@ -206,7 +165,7 @@ const mapDispatchToProps = (dispatch) => ({
   sortHotels: (type, hotels) => {
     dispatch(ActionCreator.sortHotels(type, hotels));
   },
-  addHotelInFavorite: (hotelId, status) => {
+  onAddHotelInFavorite: (hotelId, status) => {
     dispatch(Operation.addHotelInFavorite(hotelId, status));
   },
 });
