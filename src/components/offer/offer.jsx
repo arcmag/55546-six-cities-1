@@ -1,3 +1,4 @@
+import React from 'react';
 import PlaceCard from '../place-card/place-card';
 import MainMap from '../main-map/main-map';
 
@@ -196,7 +197,6 @@ class Offer extends React.Component {
                     onChange={this._handleFormChange}>
                     {Array(COUNT_RATE_STARS).fill(null).map((it, idx, arr) => {
                       const rate = arr.length - idx;
-                      /* eslint-disable */
                       return <React.Fragment key={idx}>
                         <input className="form__rating-input visually-hidden" name="rating" value={rate} id={`${rate}-stars`} type="radio" />
                         <label htmlFor={`${rate}-stars`} className="reviews__rating-label form__rating-label" title="perfect">
@@ -205,7 +205,6 @@ class Offer extends React.Component {
                           </svg>
                         </label>
                       </React.Fragment>;
-                      /* eslint-enable */
                     })}
                   </div>
                   <textarea
