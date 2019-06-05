@@ -1,14 +1,16 @@
 import leaflet from 'leaflet';
 
+import propTypesData from '../../prop-types';
+
 const FIXED_MAP_HEIGHT = 500;
 
 const icon = leaflet.icon({
-  iconUrl: `img/pin.svg`,
+  iconUrl: `/img/pin.svg`,
   iconSize: [30, 30]
 });
 
 const activeIcon = leaflet.icon({
-  iconUrl: `img/active-pin.svg`,
+  iconUrl: `/img/active-pin.svg`,
   iconSize: [30, 30]
 });
 
@@ -26,8 +28,10 @@ class MainMap extends React.Component {
 
       this._init();
     } catch (err) {
-      // err
+      return true;
     }
+
+    return true;
   }
 
   shouldComponentUpdate(props) {
@@ -100,40 +104,7 @@ class MainMap extends React.Component {
 MainMap.propTypes = {
   selectedCity: propTypes.any,
   mapPropClass: propTypes.string,
-  offers: propTypes.arrayOf(propTypes.shape({
-    bedrooms: propTypes.number,
-    city: propTypes.shape({
-      name: propTypes.string,
-      location: propTypes.shape({
-        latitude: propTypes.number,
-        longitude: propTypes.number,
-        zoom: propTypes.number,
-      }),
-    }),
-    description: propTypes.string,
-    goods: propTypes.array,
-    host: propTypes.shape({
-      avatarUrl: propTypes.string,
-      id: propTypes.number,
-      isPro: propTypes.bool,
-      name: propTypes.string,
-    }),
-    id: propTypes.number,
-    images: propTypes.array,
-    isFavorite: propTypes.bool,
-    isPremium: propTypes.bool,
-    location: propTypes.shape({
-      latitude: propTypes.number,
-      longitude: propTypes.number,
-      zoom: propTypes.number,
-    }),
-    maxAdults: propTypes.number,
-    previewImage: propTypes.string,
-    price: propTypes.number,
-    rating: propTypes.number,
-    title: propTypes.string,
-    type: propTypes.string,
-  })),
+  offers: propTypes.arrayOf(propTypesData.offer).isRequired,
 };
 
 export default MainMap;

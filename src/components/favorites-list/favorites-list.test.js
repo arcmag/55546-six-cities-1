@@ -10,7 +10,7 @@ describe(`Test FavoritesList`, () => {
   it(`test renderer`, () => {
     const tree = renderer.create(<FavoritesList
       onSetActionCard={jest.fn()}
-      offersCities={mock.cities}
+      offers={mock.cities}
     />).toJSON();
     expect(tree).toMatchSnapshot();
   });

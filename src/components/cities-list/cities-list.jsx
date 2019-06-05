@@ -19,7 +19,7 @@ const CitiesList = (props) => {
 };
 
 CitiesList.propTypes = {
-  cities: propTypes.array.isRequired,
+  cities: propTypes.arrayOf(propTypes.string).isRequired,
   onSetActiveCity: propTypes.func.isRequired,
   selectedCity: propTypes.any
 };

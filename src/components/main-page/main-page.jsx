@@ -2,6 +2,8 @@ import CitiesList from '../cities-list/cities-list';
 import PlaceList from '../place-list/place-list';
 import MainMap from '../main-map/main-map';
 
+import propTypesData from '../../prop-types';
+
 import {connect} from 'react-redux';
 import {ActionCreator, Operation} from "../../reducer/data/data";
 import {getHotels} from "../../reducer/data/selectors";
@@ -98,7 +100,6 @@ class MainPage extends React.PureComponent {
     const {city, offers, onAddHotelInFavorite, onSetActionCard} = this.props;
     return <PlaceList
       onSetActionCard={onSetActionCard}
-
       selectedCity={city}
       offers={offers}
       onAddHotelInFavorite={onAddHotelInFavorite}
@@ -144,49 +145,14 @@ class MainPage extends React.PureComponent {
   }
 }
 
-const propTypeOffer = propTypes.shape({
-  bedrooms: propTypes.number,
-  city: propTypes.shape({
-    name: propTypes.string,
-    location: propTypes.shape({
-      latitude: propTypes.number,
-      longitude: propTypes.number,
-      zoom: propTypes.number,
-    }),
-  }),
-  description: propTypes.string,
-  goods: propTypes.array,
-  host: propTypes.shape({
-    avatarUrl: propTypes.string,
-    id: propTypes.number,
-    isPro: propTypes.bool,
-    name: propTypes.string,
-  }),
-  id: propTypes.number,
-  images: propTypes.array,
-  isFavorite: propTypes.bool,
-  isPremium: propTypes.bool,
-  location: propTypes.shape({
-    latitude: propTypes.number,
-    longitude: propTypes.number,
-    zoom: propTypes.number,
-  }),
-  maxAdults: propTypes.number,
-  previewImage: propTypes.string,
-  price: propTypes.number,
-  rating: propTypes.number,
-  title: propTypes.string,
-  type: propTypes.string,
-});
-
 MainPage.propTypes = {
   onSetActiveCity: propTypes.func.isRequired,
   sortHotels: propTypes.func.isRequired,
   onAddHotelInFavorite: propTypes.func.isRequired,
   onSetActionCard: propTypes.func.isRequired,
-  offers: propTypes.arrayOf(propTypeOffer),
-  actionCard: propTypeOffer,
-  cities: propTypes.array.isRequired,
+  offers: propTypes.arrayOf(propTypesData.offer).isRequired,
+  cities: propTypes.arrayOf(propTypes.string).isRequired,
+  actionCard: propTypesData.offer,
   city: propTypes.any,
   isAuthorizationRequired: propTypes.any,
 };

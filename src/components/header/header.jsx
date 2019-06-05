@@ -1,5 +1,7 @@
 import {Link} from "react-router-dom";
 
+import propTypesData from '../../prop-types';
+
 const Header = (props) => {
   const {isAuthorizationRequired, user} = props;
 
@@ -23,7 +25,7 @@ const Header = (props) => {
         <div className="header__wrapper">
           <div className="header__left">
             <Link to="/" className="header__logo-link">
-              <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
+              <img className="header__logo" src="/img/logo.svg" alt="6 cities logo" width="81" height="41" />
             </Link>
           </div>
           <nav className="header__nav">
@@ -32,9 +34,7 @@ const Header = (props) => {
                 {!isAuthorizationRequired ?
                   <Link to="/login" className="header__login">Sign in</Link> :
                   <>
-                    <div className="header__avatar-wrapper user__avatar-wrapper">
-                      <img src={user.avatarUrl} />
-                    </div>
+                    <div className="header__avatar-wrapper user__avatar-wrapper"></div>
                     <Link to="/favorites" className="header__user-name user__name">{user.email}</Link>
                   </>}
               </li>
@@ -47,13 +47,7 @@ const Header = (props) => {
 };
 
 Header.propTypes = {
-  user: propTypes.shape({
-    avatarUrl: propTypes.string,
-    email: propTypes.string,
-    id: propTypes.number,
-    isPro: propTypes.bool,
-    name: propTypes.string,
-  }),
+  user: propTypesData.user.isRequired,
   isAuthorizationRequired: propTypes.any,
 };
 

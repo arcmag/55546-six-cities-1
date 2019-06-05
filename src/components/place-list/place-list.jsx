@@ -1,5 +1,7 @@
 import PlaceCard from '../../components/place-card/place-card';
 
+import propTypesData from '../../prop-types';
+
 class PlaceList extends React.Component {
   constructor(props) {
     super(props);
@@ -45,40 +47,7 @@ class PlaceList extends React.Component {
 PlaceList.propTypes = {
   onAddHotelInFavorite: propTypes.func.isRequired,
   onSetActionCard: propTypes.func.isRequired,
-  offers: propTypes.arrayOf(propTypes.shape({
-    bedrooms: propTypes.number,
-    city: propTypes.shape({
-      name: propTypes.string,
-      location: propTypes.shape({
-        latitude: propTypes.number,
-        longitude: propTypes.number,
-        zoom: propTypes.number,
-      }),
-    }),
-    description: propTypes.string,
-    goods: propTypes.array,
-    host: propTypes.shape({
-      avatarUrl: propTypes.string,
-      id: propTypes.number,
-      isPro: propTypes.bool,
-      name: propTypes.string,
-    }),
-    id: propTypes.number,
-    images: propTypes.array,
-    isFavorite: propTypes.bool,
-    isPremium: propTypes.bool,
-    location: propTypes.shape({
-      latitude: propTypes.number,
-      longitude: propTypes.number,
-      zoom: propTypes.number,
-    }),
-    maxAdults: propTypes.number,
-    previewImage: propTypes.string,
-    price: propTypes.number,
-    rating: propTypes.number,
-    title: propTypes.string,
-    type: propTypes.string,
-  })),
+  offers: propTypes.arrayOf(propTypesData.offer).isRequired,
   selectedCity: propTypes.any,
 };
 

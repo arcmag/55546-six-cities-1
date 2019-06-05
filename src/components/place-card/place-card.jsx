@@ -1,5 +1,7 @@
 import {Link} from "react-router-dom";
 
+import propTypesData from '../../prop-types';
+
 const FIVE_STARS_RATE = 5 / 100;
 
 const FavoriteStatus = {
@@ -70,40 +72,7 @@ const PlaceCard = (props) => {
 };
 
 PlaceCard.propTypes = {
-  data: propTypes.shape({
-    bedrooms: propTypes.number,
-    city: propTypes.shape({
-      name: propTypes.string,
-      location: propTypes.shape({
-        latitude: propTypes.number,
-        longitude: propTypes.number,
-        zoom: propTypes.number,
-      }),
-    }),
-    description: propTypes.string,
-    goods: propTypes.array,
-    host: propTypes.shape({
-      avatarUrl: propTypes.string,
-      id: propTypes.number,
-      isPro: propTypes.bool,
-      name: propTypes.string,
-    }),
-    id: propTypes.number,
-    images: propTypes.array,
-    isFavorite: propTypes.bool,
-    isPremium: propTypes.bool,
-    location: propTypes.shape({
-      latitude: propTypes.number,
-      longitude: propTypes.number,
-      zoom: propTypes.number,
-    }),
-    maxAdults: propTypes.number,
-    previewImage: propTypes.string,
-    price: propTypes.number,
-    rating: propTypes.number,
-    title: propTypes.string,
-    type: propTypes.string,
-  }),
+  data: propTypesData.offer.isRequired,
   onAddHotelInFavorite: propTypes.any,
   onSetActionCard: propTypes.func,
 };

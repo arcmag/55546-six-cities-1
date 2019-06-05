@@ -1,6 +1,9 @@
 import PlaceCard from '../place-card/place-card';
 import MainMap from '../main-map/main-map';
 
+import propTypesData from '../../prop-types';
+
+import {Redirect} from "react-router-dom";
 import {connect} from 'react-redux';
 import moment from 'moment';
 import {Operation} from "../../reducer/data/data";
@@ -20,8 +23,12 @@ const FavoriteStatus = {
   REMOVE: 0,
 };
 
+let statusRedirect = false;
+
 class Offer extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+
     this._init();
   }
 
@@ -30,11 +37,16 @@ class Offer extends React.Component {
       offers,
       isAuthorizationRequired,
       onAddHotelInFavorite,
-      onSetActionCard
+      onSetActionCard,
+      actionCard,
     } = this.props;
     let {comments} = this.props;
     let offer = null;
     let otherPlaces = [];
+
+    if (statusRedirect) {
+      return <Redirect to="/login" />;
+    }
 
     if (offers.length === 0) {
       return null;
@@ -88,8 +100,8 @@ class Offer extends React.Component {
                         FavoriteStatus[offer.isFavorite ? `REMOVE` : `ADD`]
                     );
                   } else {
-                    history.pushState(null, null, `/login`);
-                    location.reload();
+                    statusRedirect = true;
+                    this.forceUpdate();
                   }
                 }}>
                 <svg className="property__bookmark-icon" width="31" height="33">
@@ -153,7 +165,7 @@ class Offer extends React.Component {
                     return <li key={idx} className="reviews__item">
                       <div className="reviews__user user">
                         <div className="reviews__avatar-wrapper user__avatar-wrapper">
-                          <img className="reviews__avatar user__avatar" src={it.user.avatarUrl} width="54" height="54" alt="Reviews avatar" />
+                          <img className="reviews__avatar user__avatar" src="/img/avatar-max.jpg" width="54" height="54" alt="Reviews avatar" />
                         </div>
                         <span className="reviews__user-name">{it.user.name}</span>
                       </div>
@@ -221,6 +233,7 @@ class Offer extends React.Component {
           mapPropClass={`property__map`}
           selectedCity={offer.city.name}
           offers={otherPlaces}
+          actionCard={actionCard}
         />
       </section>
       <div className="container">
@@ -231,7 +244,8 @@ class Offer extends React.Component {
               return <PlaceCard
                 key={idx}
                 data={it}
-                onSetActionCard={() => {
+                onSetActionCard={(evt) => {
+                  evt.preventDefault();
                   onSetActionCard(it);
                 }}
               />;
@@ -266,6 +280,7 @@ class Offer extends React.Component {
     this._commentField.current.value = ``;
     this._enabledFormComment();
   }
+
   _commentPostReject() {
     this._enabledFormComment();
     this._setErrorForm();
@@ -302,6 +317,7 @@ class Offer extends React.Component {
   _setErrorForm() {
     this._commentForm.current.style.border = `solid 1px red`;
   }
+
   _clearErrorForm() {
     this._commentForm.current.style.border = ``;
   }
@@ -309,6 +325,7 @@ class Offer extends React.Component {
   _disabledButtonComment() {
     this._commentBtn.current.disabled = true;
   }
+
   _enabledButtonComment() {
     this._commentBtn.current.disabled = false;
   }
@@ -317,53 +334,19 @@ class Offer extends React.Component {
     this._commentBtn.current.disabled = true;
     this._commentField.current.disabled = true;
   }
+
   _enabledFormComment() {
     this._commentBtn.current.disabled = false;
     this._commentField.current.disabled = false;
   }
 }
 
-const propTypeOffer = propTypes.shape({
-  bedrooms: propTypes.number,
-  city: propTypes.shape({
-    name: propTypes.string,
-    location: propTypes.shape({
-      latitude: propTypes.number,
-      longitude: propTypes.number,
-      zoom: propTypes.number,
-    }),
-  }),
-  description: propTypes.string,
-  goods: propTypes.array,
-  host: propTypes.shape({
-    avatarUrl: propTypes.string,
-    id: propTypes.number,
-    isPro: propTypes.bool,
-    name: propTypes.string,
-  }),
-  id: propTypes.number,
-  images: propTypes.array,
-  isFavorite: propTypes.bool,
-  isPremium: propTypes.bool,
-  location: propTypes.shape({
-    latitude: propTypes.number,
-    longitude: propTypes.number,
-    zoom: propTypes.number,
-  }),
-  maxAdults: propTypes.number,
-  previewImage: propTypes.string,
-  price: propTypes.number,
-  rating: propTypes.number,
-  title: propTypes.string,
-  type: propTypes.string,
-});
-
 Offer.propTypes = {
   loadHotelComments: propTypes.func.isRequired,
   hotelCommentPost: propTypes.func.isRequired,
   onAddHotelInFavorite: propTypes.func.isRequired,
   onSetActionCard: propTypes.func.isRequired,
-  offers: propTypes.arrayOf(propTypeOffer),
+  offers: propTypes.arrayOf(propTypesData.offer).isRequired,
   comments: propTypes.arrayOf(propTypes.shape({
     comment: propTypes.string,
     date: propTypes.string,
@@ -375,8 +358,9 @@ Offer.propTypes = {
       isPro: propTypes.bool,
       name: propTypes.string,
     })
-  })),
-  isAuthorizationRequired: propTypes.any
+  })).isRequired,
+  actionCard: propTypesData.offer,
+  isAuthorizationRequired: propTypes.any,
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {

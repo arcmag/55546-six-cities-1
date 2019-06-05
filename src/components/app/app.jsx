@@ -10,6 +10,8 @@ import MainPage from '../main-page/main-page';
 import Favorites from '../favorites/favorites';
 import SignIn from '../sign-in/sign-in';
 
+import propTypesData from '../../prop-types';
+
 import withActiveCard from '../../hocs/with-active-card/with-active-card';
 
 const WrapperMainPage = withActiveCard(MainPage);
@@ -66,48 +68,9 @@ const App = (props) => {
 
 App.propTypes = {
   onSetActiveCity: propTypes.func.isRequired,
-  user: propTypes.shape({
-    avatarUrl: propTypes.string,
-    email: propTypes.string,
-    id: propTypes.number,
-    isPro: propTypes.bool,
-    name: propTypes.string,
-  }),
-  hotels: propTypes.arrayOf(propTypes.shape({
-    bedrooms: propTypes.number,
-    city: propTypes.shape({
-      name: propTypes.string,
-      location: propTypes.shape({
-        latitude: propTypes.number,
-        longitude: propTypes.number,
-        zoom: propTypes.number,
-      }),
-    }),
-    description: propTypes.string,
-    goods: propTypes.array,
-    host: propTypes.shape({
-      avatarUrl: propTypes.string,
-      id: propTypes.number,
-      isPro: propTypes.bool,
-      name: propTypes.string,
-    }),
-    id: propTypes.number,
-    images: propTypes.array,
-    isFavorite: propTypes.bool,
-    isPremium: propTypes.bool,
-    location: propTypes.shape({
-      latitude: propTypes.number,
-      longitude: propTypes.number,
-      zoom: propTypes.number,
-    }),
-    maxAdults: propTypes.number,
-    previewImage: propTypes.string,
-    price: propTypes.number,
-    rating: propTypes.number,
-    title: propTypes.string,
-    type: propTypes.string,
-  })),
-  cities: propTypes.array.isRequired,
+  user: propTypesData.user.isRequired,
+  hotels: propTypes.arrayOf(propTypesData.offer).isRequired,
+  cities: propTypes.arrayOf(propTypes.string).isRequired,
   selectCity: propTypes.string.isRequired,
   isAuthorizationRequired: propTypes.any,
 };
