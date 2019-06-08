@@ -1,5 +1,5 @@
 const withActiveCard = (Component) => {
-  class WithActiveCard extends React.Component {
+  class WithActiveCard extends React.PureComponent {
     constructor(props) {
       super(props);
 

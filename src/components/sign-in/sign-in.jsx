@@ -1,7 +1,7 @@
 import {connect} from "react-redux";
 import {Operation} from "../../reducer/user/user";
 
-class SignIn extends React.Component {
+class SignIn extends React.PureComponent {
   constructor(props) {
     super(props);
     this._loginField = React.createRef();
