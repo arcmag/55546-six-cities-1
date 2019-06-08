@@ -2,7 +2,7 @@ import PlaceCard from '../../components/place-card/place-card';
 
 import propTypesData from '../../prop-types';
 
-class PlaceList extends React.Component {
+class PlaceList extends React.PureComponent {
   constructor(props) {
     super(props);
 

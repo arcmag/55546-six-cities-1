@@ -67,32 +67,40 @@ exports[`Test MainPage test renderer 1`] = `
           </span>
           <ul
             className="places__options places__options--custom"
-            onClick={[Function]}
+            style={
+              Object {
+                "display": "none",
+              }
+            }
           >
             <li
               className="places__option places__option--active"
               data-sort-offers="default"
+              onClick={[Function]}
               tabIndex="0"
             >
               Popular
             </li>
             <li
-              className="places__option"
-              data-sort-offers="max-price"
+              className="places__option "
+              data-sort-offers="min-price"
+              onClick={[Function]}
               tabIndex="0"
             >
               Price: low to high
             </li>
             <li
-              className="places__option"
-              data-sort-offers="min-price"
+              className="places__option "
+              data-sort-offers="max-price"
+              onClick={[Function]}
               tabIndex="0"
             >
               Price: high to low
             </li>
             <li
-              className="places__option"
+              className="places__option "
               data-sort-offers="max-rate"
+              onClick={[Function]}
               tabIndex="0"
             >
               Top rated first

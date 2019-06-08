@@ -8,6 +8,26 @@ import {connect} from 'react-redux';
 import {ActionCreator, Operation} from "../../reducer/data/data";
 import {getHotels} from "../../reducer/data/selectors";
 
+const itemsSortList = [
+  {
+    title: `Popular`,
+    isActive: true,
+    data: `default`,
+  },
+  {
+    title: `Price: low to high`,
+    data: `min-price`,
+  },
+  {
+    title: `Price: high to low`,
+    data: `max-price`,
+  },
+  {
+    title: `Top rated first`,
+    data: `max-rate`,
+  },
+];
+
 class MainPage extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -16,8 +36,6 @@ class MainPage extends React.PureComponent {
     this._listSort = React.createRef();
 
     this._handleSortButtonClick = this._handleSortButtonClick.bind(this);
-    this._handleSortListClick = this._handleSortListClick.bind(this);
-    this._handleDocumentClick = this._handleDocumentClick.bind(this);
   }
 
   render() {
@@ -25,8 +43,9 @@ class MainPage extends React.PureComponent {
       _buttonSort,
       _handleSortButtonClick,
       _listSort,
-      _handleSortListClick,
     } = this;
+
+    const {sortHotels} = this.props;
 
     return <>
       <main className="page__main page__main--index">
@@ -43,9 +62,8 @@ class MainPage extends React.PureComponent {
                   ref={_buttonSort}
                   className="places__sorting-type"
                   tabIndex="0"
-                  onClick={_handleSortButtonClick}
-                >
-                  Popular
+                  onClick={_handleSortButtonClick}>
+                  {itemsSortList.find((it) => it.isActive).title}
                   <svg className="places__sorting-arrow" width="7" height="4">
                     <use xlinkHref="#icon-arrow-select"></use>
                   </svg>
@@ -53,12 +71,22 @@ class MainPage extends React.PureComponent {
                 <ul
                   ref={_listSort}
                   className="places__options places__options--custom"
-                  onClick={_handleSortListClick}
-                >
-                  <li data-sort-offers="default" className="places__option places__option--active" tabIndex="0">Popular</li>
-                  <li data-sort-offers="max-price" className="places__option" tabIndex="0">Price: low to high</li>
-                  <li data-sort-offers="min-price" className="places__option" tabIndex="0">Price: high to low</li>
-                  <li data-sort-offers="max-rate" className="places__option" tabIndex="0">Top rated first</li>
+                  style={{display: `none`}}>
+                  {itemsSortList.map((it, idx) => {
+                    return <li
+                      key={idx}
+                      onClick={() => {
+                        itemsSortList.forEach((item) => {
+                          item.isActive = false;
+                        });
+                        itemsSortList[idx].isActive = true;
+                        sortHotels(it.data);
+                        this._toggleSortList();
+                      }}
+                      data-sort-offers={it.data}
+                      className={`places__option ${it.isActive ? `places__option--active` : ``}`}
+                      tabIndex="0">{it.title}</li>;
+                  })}
                 </ul>
               </form>
               {this._renderPlaceList()}
@@ -107,41 +135,11 @@ class MainPage extends React.PureComponent {
   }
 
   _handleSortButtonClick() {
-    this._openSortList();
-    document.addEventListener(`click`, this._handleDocumentClick);
+    this._toggleSortList();
   }
 
-  _handleSortListClick(evt) {
-    evt.preventDefault();
-    const currentItem = evt.target;
-    const type = currentItem.dataset.sortOffers;
-    const selectedItem = document.querySelector(`.places__option--active`);
-
-    this._buttonSort.current.replaceChild(
-        document.createTextNode(currentItem.textContent),
-        this._buttonSort.current.childNodes[0]
-    );
-
-    if (selectedItem) {
-      selectedItem.classList.remove(`places__option--active`);
-    }
-
-    currentItem.classList.add(`places__option--active`);
-
-    this.props.sortHotels(type);
-  }
-
-  _handleDocumentClick() {
-    this._closeSortList();
-    document.removeEventListener(`click`, this._handleDocumentClick);
-  }
-
-  _openSortList() {
-    this._listSort.current.style.display = `block`;
-  }
-
-  _closeSortList() {
-    this._listSort.current.style.display = `none`;
+  _toggleSortList() {
+    this._listSort.current.style.display = this._listSort.current.style.display === `block` ? `none` : `block`;
   }
 }
 

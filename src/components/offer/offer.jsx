@@ -12,21 +12,26 @@ import {getComments} from "../../reducer/data/selectors";
 
 const COUNT_RATE_STARS = 5;
 const FIVE_STARS_RATE = COUNT_RATE_STARS / 100;
-const MIN_COMMENT_LEN = 50;
-const MAX_COMMENT_LEN = 300;
-
-const MAX_COUNT_OTHER_PLACES = 3;
-const MAX_COUNT_OFFER_IMAGES = 6;
-const MAX_COUNT_OFFER_COMMENTS = 10;
 
 const FavoriteStatus = {
   ADD: 1,
   REMOVE: 0,
 };
 
+const CountOffer = {
+  OTHER_PLACES: 3,
+  IMAGES: 6,
+  COMMENTS: 10,
+};
+
+const CommentLen = {
+  MIN: 50,
+  MAX: 300,
+};
+
 let statusRedirect = false;
 
-class Offer extends React.Component {
+class Offer extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -59,24 +64,15 @@ class Offer extends React.Component {
 
     offer = offers.find((it) => it.id === +this.id);
 
-    if (!offer) {
-      offer = {
-        host: {},
-        city: {},
-        images: [],
-        goods: [],
-      };
-    }
-
     otherPlaces = offers.filter(
-        (it) => it !== offer && it.city.name === offer.city.name
-    ).slice(0, MAX_COUNT_OTHER_PLACES);
+        (it) => it.id !== offer.id && it.city.name === offer.city.name
+    ).slice(0, CountOffer.OTHER_PLACES);
 
     return <main className="page__main page__main--property">
       <section className="property">
         <div className="property__gallery-container container">
           <div className="property__gallery">
-            {offer.images.slice(0, MAX_COUNT_OFFER_IMAGES).map((it, idx) => {
+            {offer.images.slice(0, CountOffer.IMAGES).map((it, idx) => {
               return <div key={idx} className="property__image-wrapper">
                 <img className="property__image" src={it} alt="Photo studio" />
               </div>;
@@ -105,7 +101,9 @@ class Offer extends React.Component {
                     this.forceUpdate();
                   }
                 }}>
-                <svg className="property__bookmark-icon" width="31" height="33">
+                <svg
+                  style={{fill: offer.isFavorite ? `#4481c3` : `transparent`}}
+                  className="property__bookmark-icon" width="31" height="33">
                   <use xlinkHref="#icon-bookmark"></use>
                 </svg>
                 <span className="visually-hidden">To bookmarks</span>
@@ -161,7 +159,7 @@ class Offer extends React.Component {
               <ul className="reviews__list">
                 {comments
                   .sort((a, b) => +new Date(b.date) - +new Date(a.date))
-                  .slice(0, MAX_COUNT_OFFER_COMMENTS)
+                  .slice(0, CountOffer.COMMENTS)
                   .map((it, idx) => {
                     return <li key={idx} className="reviews__item">
                       <div className="reviews__user user">
@@ -197,8 +195,17 @@ class Offer extends React.Component {
                     onChange={this._handleFormChange}>
                     {Array(COUNT_RATE_STARS).fill(null).map((it, idx, arr) => {
                       const rate = arr.length - idx;
+
                       return <React.Fragment key={idx}>
-                        <input className="form__rating-input visually-hidden" name="rating" value={rate} id={`${rate}-stars`} type="radio" />
+                        <input
+                          className="form__rating-input visually-hidden"
+                          name="rating"
+                          value={rate}
+                          id={`${rate}-stars`}
+                          type="radio"
+                          onClick={() => {
+                            this.selectedRateting = rate;
+                          }} />
                         <label htmlFor={`${rate}-stars`} className="reviews__rating-label form__rating-label" title="perfect">
                           <svg className="form__star-image" width="37" height="33">
                             <use xlinkHref="#icon-star"></use>
@@ -256,15 +263,15 @@ class Offer extends React.Component {
   }
 
   _init() {
-    this.id = location.pathname.split(`/`)[2];
+    this.id = location.pathname.split(`/`)[2] || -1;
 
     this._commentForm = React.createRef();
     this._commentField = React.createRef();
     this._ratingList = React.createRef();
     this._commentBtn = React.createRef();
 
+    this.selectedRateting = null;
     this.text = null;
-    this.rating = null;
 
     this._handleFormChange = this._handleFormChange.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
@@ -289,7 +296,7 @@ class Offer extends React.Component {
     evt.preventDefault();
     this.props.hotelCommentPost(
         this.id,
-        {rating: +this.rating.value, comment: this.text},
+        {rating: +this.selectedRateting, comment: this.text},
         this._commentPostResolve,
         this._commentPostReject
     );
@@ -304,9 +311,8 @@ class Offer extends React.Component {
     }
 
     this.text = this._commentField.current.value;
-    this.rating = [...this._ratingList.current.querySelectorAll(`.form__rating-input`)].find((it) => it.checked);
 
-    if (this.text.length < MIN_COMMENT_LEN || this.text.length > MAX_COMMENT_LEN || !this.rating) {
+    if (this.text.length < CommentLen.MIN || this.text.length > CommentLen.MAX || !this.selectedRateting) {
       this._disabledButtonComment();
     } else {
       this._enabledButtonComment();
