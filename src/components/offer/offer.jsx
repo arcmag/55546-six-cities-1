@@ -68,7 +68,7 @@ class Offer extends React.PureComponent {
         (it) => it.id !== offer.id && it.city.name === offer.city.name
     ).slice(0, CountOffer.OTHER_PLACES);
 
-    return <main className="page__main page__main--property">
+    return <main className="page__main page__main--property" >
       <section className="property">
         <div className="property__gallery-container container">
           <div className="property__gallery">
