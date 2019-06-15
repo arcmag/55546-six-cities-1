@@ -33,7 +33,7 @@ exports[`Test SignIn renderer 1`] = `
             defaultValue="test@test.com"
             name="email"
             placeholder="Email"
-            required=""
+            required={true}
             type="email"
           />
         </div>
@@ -49,7 +49,7 @@ exports[`Test SignIn renderer 1`] = `
             className="login__input form__input"
             name="password"
             placeholder="Password"
-            required=""
+            required={true}
             type="password"
           />
         </div>

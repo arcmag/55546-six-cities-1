@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import {connect} from 'react-redux';
 import {ActionCreator} from "../../reducer/user/user";
 import {getCities, getHotels} from "../../reducer/data/selectors";
@@ -10,14 +12,23 @@ import MainPage from '../main-page/main-page';
 import Favorites from '../favorites/favorites';
 import SignIn from '../sign-in/sign-in';
 
-import propTypesData from '../../prop-types';
+import {OfferType, UserType} from '../../types';
 
 import withActiveCard from '../../hocs/with-active-card/with-active-card';
 
 const WrapperMainPage = withActiveCard(MainPage);
 const WrapperOffer = withActiveCard(Offer);
 
-const App = (props) => {
+interface Props {
+  onSetActiveCity: (cityName: string) => void,
+  user: UserType,
+  hotels: OfferType[],
+  cities: string[],
+  selectCity: string,
+  isAuthorizationRequired: any,
+}
+
+const App: React.FunctionComponent<Props> = (props) => {
   const {
     onSetActiveCity,
     cities,
@@ -66,16 +77,7 @@ const App = (props) => {
   </>;
 };
 
-App.propTypes = {
-  onSetActiveCity: propTypes.func.isRequired,
-  user: propTypesData.user.isRequired,
-  hotels: propTypes.arrayOf(propTypesData.offer).isRequired,
-  cities: propTypes.arrayOf(propTypes.string).isRequired,
-  selectCity: propTypes.string.isRequired,
-  isAuthorizationRequired: propTypes.any,
-};
-
-const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
+const mapStateToProps = (state: any, ownProps: any) => Object.assign({}, ownProps, {
   hotels: getHotels(state),
   user: getUser(state),
   cities: getCities(state),
@@ -83,8 +85,8 @@ const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
   isAuthorizationRequired: getAuthorizationStatus(state),
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  onSetActiveCity: (cityName) => {
+const mapDispatchToProps = (dispatch: any) => ({
+  onSetActiveCity: (cityName: string) => {
     dispatch(ActionCreator.setSelectCity(cityName));
   },
 });

@@ -1,8 +1,10 @@
+import * as React from 'react';
+
 import CitiesList from '../cities-list/cities-list';
 import PlaceList from '../place-list/place-list';
 import MainMap from '../main-map/main-map';
 
-import propTypesData from '../../prop-types';
+import {OfferType} from '../../types';
 
 import {connect} from 'react-redux';
 import {ActionCreator, Operation} from "../../reducer/data/data";
@@ -28,7 +30,22 @@ const itemsSortList = [
   },
 ];
 
-class MainPage extends React.PureComponent {
+interface Props {
+  onSetActiveCity: (cityName: string) => void,
+  sortHotels: (type: string) => void,
+  onAddHotelInFavorite: (hotelId: number, status: number) => void,
+  onSetActionCard: (card: OfferType) => void,
+  offers: OfferType[],
+  cities: string[],
+  actionCard: OfferType,
+  city: string,
+  isAuthorizationRequired: boolean,
+}
+
+class MainPage extends React.PureComponent<Props, null> {
+  private _buttonSort: React.RefObject<HTMLButtonElement>
+  private _listSort: React.RefObject<HTMLUListElement>
+
   constructor(props) {
     super(props);
 
@@ -39,18 +56,26 @@ class MainPage extends React.PureComponent {
   }
 
   render() {
+    const {_buttonSort, _handleSortButtonClick, _listSort} = this;
     const {
-      _buttonSort,
-      _handleSortButtonClick,
-      _listSort,
-    } = this;
-
-    const {sortHotels} = this.props;
+      sortHotels,
+      offers,
+      actionCard,
+      city,
+      cities,
+      onSetActiveCity,
+      onAddHotelInFavorite,
+      onSetActionCard,
+    } = this.props;
 
     return <>
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
-        {this._renderCitiesList()}
+        <CitiesList
+          onSetActiveCity={onSetActiveCity}
+          selectedCity={city}
+          cities={cities}
+        />
         <div className="cities__places-wrapper">
           <div className="cities__places-container container">
             <section className="cities__places places">
@@ -61,7 +86,7 @@ class MainPage extends React.PureComponent {
                 <span
                   ref={_buttonSort}
                   className="places__sorting-type"
-                  tabIndex="0"
+                  tabIndex={0}
                   onClick={_handleSortButtonClick}>
                   {itemsSortList.find((it) => it.isActive).title}
                   <svg className="places__sorting-arrow" width="7" height="4">
@@ -85,14 +110,23 @@ class MainPage extends React.PureComponent {
                       }}
                       data-sort-offers={it.data}
                       className={`places__option ${it.isActive ? `places__option--active` : ``}`}
-                      tabIndex="0">{it.title}</li>;
+                      tabIndex={0}>{it.title}</li>;
                   })}
                 </ul>
               </form>
-              {this._renderPlaceList()}
+              <PlaceList
+                onSetActionCard={onSetActionCard}
+                selectedCity={city}
+                offers={offers}
+                onAddHotelInFavorite={onAddHotelInFavorite}
+              />
             </section>
             <div className="cities__right-section">
-              {this._renderMainMap()}
+              <MainMap
+                actionCard={actionCard}
+                selectedCity={city}
+                offers={offers}
+              />
             </div>
           </div>
         </div>
@@ -105,35 +139,6 @@ class MainPage extends React.PureComponent {
     return `${offers.filter((it) => it.city.name === city).length} places to stay in ${city}`;
   }
 
-  _renderCitiesList() {
-    const {city, cities, onSetActiveCity} = this.props;
-
-    return <CitiesList
-      onSetActiveCity={onSetActiveCity}
-      selectedCity={city}
-      cities={cities}
-    />;
-  }
-
-  _renderMainMap() {
-    const {city, offers, actionCard} = this.props;
-    return <MainMap
-      actionCard={actionCard}
-      selectedCity={city}
-      offers={offers}
-    />;
-  }
-
-  _renderPlaceList() {
-    const {city, offers, onAddHotelInFavorite, onSetActionCard} = this.props;
-    return <PlaceList
-      onSetActionCard={onSetActionCard}
-      selectedCity={city}
-      offers={offers}
-      onAddHotelInFavorite={onAddHotelInFavorite}
-    />;
-  }
-
   _handleSortButtonClick() {
     this._toggleSortList();
   }
@@ -143,27 +148,15 @@ class MainPage extends React.PureComponent {
   }
 }
 
-MainPage.propTypes = {
-  onSetActiveCity: propTypes.func.isRequired,
-  sortHotels: propTypes.func.isRequired,
-  onAddHotelInFavorite: propTypes.func.isRequired,
-  onSetActionCard: propTypes.func.isRequired,
-  offers: propTypes.arrayOf(propTypesData.offer).isRequired,
-  cities: propTypes.arrayOf(propTypes.string).isRequired,
-  actionCard: propTypesData.offer,
-  city: propTypes.any,
-  isAuthorizationRequired: propTypes.any,
-};
-
-const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
+const mapStateToProps = (state: any, ownProps: any) => Object.assign({}, ownProps, {
   offers: getHotels(state),
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  sortHotels: (type, hotels) => {
-    dispatch(ActionCreator.sortHotels(type, hotels));
+const mapDispatchToProps = (dispatch: any) => ({
+  sortHotels: (type: string) => {
+    dispatch(ActionCreator.sortHotels(type));
   },
-  onAddHotelInFavorite: (hotelId, status) => {
+  onAddHotelInFavorite: (hotelId: number, status: number) => {
     dispatch(Operation.addHotelInFavorite(hotelId, status));
   },
 });

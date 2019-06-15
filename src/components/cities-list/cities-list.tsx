@@ -1,4 +1,13 @@
-const CitiesList = (props) => {
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+
+interface Props {
+  cities: string[],
+  onSetActiveCity: (cityName: string) => void,
+  selectedCity: string,
+}
+
+const CitiesList: React.FunctionComponent<Props> = (props) => {
   const {selectedCity, cities, onSetActiveCity} = props;
 
   return <div className="cities tabs">
@@ -16,12 +25,6 @@ const CitiesList = (props) => {
       </ul>
     </section>
   </div>;
-};
-
-CitiesList.propTypes = {
-  cities: propTypes.arrayOf(propTypes.string).isRequired,
-  onSetActiveCity: propTypes.func.isRequired,
-  selectedCity: propTypes.any
 };
 
 export default CitiesList;

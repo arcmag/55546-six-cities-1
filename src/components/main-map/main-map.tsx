@@ -1,25 +1,23 @@
-import leaflet from 'leaflet';
+import * as React from 'react';
+import * as leaflet from 'leaflet';
 
-import propTypesData from '../../prop-types';
+import {OfferType} from '../../types';
 
 const FIXED_MAP_HEIGHT = 500;
-
-const icon = leaflet.icon({
-  iconUrl: `/img/pin.svg`,
-  iconSize: [30, 30]
-});
-
-const activeIcon = leaflet.icon({
-  iconUrl: `/img/active-pin.svg`,
-  iconSize: [30, 30]
-});
 
 let center = [52.38333, 4.9];
 let zoom = 12;
 
 let map = null;
 
-class MainMap extends React.Component {
+interface Props {
+  selectedCity: string,
+  mapPropClass?: string,
+  offers: OfferType[],
+  actionCard: OfferType,
+}
+
+class MainMap extends React.Component<Props, null> {
   componentDidMount() {
     try {
       if (map) {
@@ -57,7 +55,7 @@ class MainMap extends React.Component {
 
   _init(props = this.props) {
     const {selectedCity} = props;
-    const actionCard = props.actionCard || {};
+    const actionCard = props.actionCard || {id: -1};
 
     const offers = selectedCity === `` ? props.offers : props.offers
       .filter((it) => it.city.name === selectedCity);
@@ -92,19 +90,18 @@ class MainMap extends React.Component {
 
       leaflet
         .marker(
-            [it.location.latitude, it.location.longitude],
-            {icon: it.id === actionCard.id ? activeIcon : icon}
+          [it.location.latitude, it.location.longitude],
+          {
+            icon: leaflet.icon({
+              iconUrl: `/img/${it.id === actionCard.id ? `active-` : ``}pin.svg`,
+              iconSize: [30, 30]
+            })
+          }
         )
         .addTo(map);
     });
     map.setView(center, zoom);
   }
 }
-
-MainMap.propTypes = {
-  selectedCity: propTypes.any,
-  mapPropClass: propTypes.string,
-  offers: propTypes.arrayOf(propTypesData.offer).isRequired,
-};
 
 export default MainMap;

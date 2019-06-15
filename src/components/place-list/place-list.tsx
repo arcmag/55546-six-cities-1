@@ -1,8 +1,17 @@
+import * as React from 'react';
+
 import PlaceCard from '../../components/place-card/place-card';
 
-import propTypesData from '../../prop-types';
+import {OfferType} from '../../types';
 
-class PlaceList extends React.PureComponent {
+interface Props {
+  onAddHotelInFavorite: (hotelId: number, status: number) => void,
+  onSetActionCard: (card: OfferType) => void,
+  offers: OfferType[],
+  selectedCity: string,
+}
+
+class PlaceList extends React.PureComponent<Props, null> {
   constructor(props) {
     super(props);
 
@@ -43,13 +52,5 @@ class PlaceList extends React.PureComponent {
     />);
   }
 }
-
-PlaceList.propTypes = {
-  onAddHotelInFavorite: propTypes.func.isRequired,
-  onSetActionCard: propTypes.func.isRequired,
-  offers: propTypes.arrayOf(propTypesData.offer).isRequired,
-  selectedCity: propTypes.any,
-};
-
 
 export default PlaceList;

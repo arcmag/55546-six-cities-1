@@ -1,5 +1,5 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import reducer from './reducer/index';
 import {createStore, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
@@ -15,7 +15,7 @@ import App from './components/app/app';
 const mainContainer = document.querySelector(`#root`);
 
 const init = () => {
-  const api = createAPI(() => {
+  const api = createAPI((): void => {
     store.dispatch(ActionCreator.requireAuthorization(false));
   });
 

@@ -1,5 +1,13 @@
+import * as React from 'react';
+
+import {OfferType} from '../../types';
+
+interface State {
+  actionCard: OfferType
+}
+
 const withActiveCard = (Component) => {
-  class WithActiveCard extends React.PureComponent {
+  class WithActiveCard extends React.PureComponent<React.ComponentProps<typeof Component>, State> {
     constructor(props) {
       super(props);
 
@@ -18,7 +26,7 @@ const withActiveCard = (Component) => {
       />;
     }
 
-    _onSetActionCard(card) {
+    _onSetActionCard(card: OfferType) {
       this.setState({
         actionCard: card
       });

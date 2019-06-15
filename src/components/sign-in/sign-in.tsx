@@ -1,13 +1,22 @@
+import * as React from 'react';
+
 import {connect} from "react-redux";
 import {Operation} from "../../reducer/user/user";
 
-class SignIn extends React.PureComponent {
+import {DataSignIn} from '../../types';
+
+interface Props {
+  signIn: (data: DataSignIn) => void
+}
+
+class SignIn extends React.PureComponent<Props, null> {
+  private _loginField: React.RefObject<HTMLInputElement>;
+  private _passwordField: React.RefObject<HTMLInputElement>;
+
   constructor(props) {
     super(props);
     this._loginField = React.createRef();
     this._passwordField = React.createRef();
-    this._errorLogin = React.createRef();
-    this._errorPassword = React.createRef();
 
     this._handleButtonSubmit = this._handleButtonSubmit.bind(this);
   }
@@ -23,11 +32,11 @@ class SignIn extends React.PureComponent {
             <form className="login__form form" action="#" method="post">
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">E-mail</label>
-                <input ref={_loginField} defaultValue="test@test.com" className="login__input form__input" type="email" name="email" placeholder="Email" required="" />
+                <input ref={_loginField} defaultValue="test@test.com" className="login__input form__input" type="email" name="email" placeholder="Email" required={true} />
               </div>
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">Password</label>
-                <input ref={_passwordField} className="login__input form__input" type="password" name="password" placeholder="Password" required="" />
+                <input ref={_passwordField} className="login__input form__input" type="password" name="password" placeholder="Password" required={true} />
               </div>
               <button className="login__submit form__submit button" type="submit"
                 onClick={_handleButtonSubmit}>Sign in</button>
@@ -60,14 +69,10 @@ class SignIn extends React.PureComponent {
   }
 }
 
-SignIn.propTypes = {
-  signIn: propTypes.func.isRequired
-};
+const mapStateToProps = (state: any, ownProps: any) => Object.assign({}, ownProps);
 
-const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps);
-
-const mapDispatchToProps = (dispatch) => ({
-  signIn: (data) => {
+const mapDispatchToProps = (dispatch: any) => ({
+  signIn: (data: DataSignIn) => {
     dispatch(Operation.signIn(data));
   },
 });
