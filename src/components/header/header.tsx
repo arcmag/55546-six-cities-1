@@ -1,8 +1,15 @@
+import * as React from 'react';
+
 import {Link} from "react-router-dom";
 
-import propTypesData from '../../prop-types';
+import {UserType} from '../../types';
 
-const Header = (props) => {
+interface Props {
+  user: UserType,
+  isAuthorizationRequired: boolean,
+}
+
+const Header: React.FunctionComponent<Props> = (props) => {
   const {isAuthorizationRequired, user} = props;
 
   return <>
@@ -44,11 +51,6 @@ const Header = (props) => {
       </div>
     </header>
   </>;
-};
-
-Header.propTypes = {
-  user: propTypesData.user.isRequired,
-  isAuthorizationRequired: propTypes.any,
 };
 
 export default Header;

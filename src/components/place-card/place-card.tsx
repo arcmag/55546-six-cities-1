@@ -1,13 +1,10 @@
+import * as React from 'react';
+
 import {Link} from "react-router-dom";
 
-import propTypesData from '../../prop-types';
+import {FavoriteStatus} from '../../types';
 
 const FIVE_STARS_RATE = 5 / 100;
-
-const FavoriteStatus = {
-  ADD: 1,
-  REMOVE: 0,
-};
 
 const PlaceCard = (props) => {
   const {
@@ -21,10 +18,7 @@ const PlaceCard = (props) => {
     isPremium,
   } = props.data;
 
-  const {
-    onSetActionCard,
-    onAddHotelInFavorite
-  } = props;
+  const {onSetActionCard, onAddHotelInFavorite} = props;
 
   return <article
     className="cities__place-card place-card">
@@ -69,12 +63,6 @@ const PlaceCard = (props) => {
       <p className="place-card__type">{type}</p>
     </div>
   </article>;
-};
-
-PlaceCard.propTypes = {
-  data: propTypesData.offer.isRequired,
-  onAddHotelInFavorite: propTypes.any,
-  onSetActionCard: propTypes.func,
 };
 
 export default PlaceCard;

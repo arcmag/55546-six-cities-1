@@ -1,14 +1,21 @@
-import FavoritesList from '../favorites-list/favorites-list';
+import * as React from 'react';
 
-import propTypesData from '../../prop-types';
+import FavoritesList from '../favorites-list/favorites-list';
 
 import {connect} from 'react-redux';
 import {getHotels} from "../../reducer/data/selectors";
 
 import withActiveCard from '../../hocs/with-active-card/with-active-card';
+
+import {OfferType} from '../../types';
+
 const WrapperFavoritesList = withActiveCard(FavoritesList);
 
-class Favorites extends React.PureComponent {
+interface Props {
+  offers: OfferType[],
+}
+
+class Favorites extends React.PureComponent<Props, null> {
   render() {
     const offersCities = this._getCardsByCities();
 
@@ -62,11 +69,7 @@ class Favorites extends React.PureComponent {
   }
 }
 
-Favorites.propTypes = {
-  offers: propTypes.arrayOf(propTypesData.offer).isRequired,
-};
-
-const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
+const mapStateToProps = (state: any, ownProps: any) => Object.assign({}, ownProps, {
   offers: getHotels(state),
 });
 

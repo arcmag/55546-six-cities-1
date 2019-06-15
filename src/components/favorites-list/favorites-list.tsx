@@ -1,8 +1,15 @@
+import * as React from 'react';
+
 import PlaceCard from '../place-card/place-card';
 
-import propTypesData from '../../prop-types';
+import {OfferType} from '../../types';
 
-const FavoritesList = (props) => {
+interface Props {
+  onSetActionCard: () => void,
+  offers: OfferType[]
+}
+
+const FavoritesList = (props: Props) => {
   const {offers, onSetActionCard} = props;
 
   return offers.map((it, idx) => {
@@ -12,11 +19,6 @@ const FavoritesList = (props) => {
       onSetActionCard={onSetActionCard}
     />;
   });
-};
-
-FavoritesList.propTypes = {
-  onSetActionCard: propTypes.func.isRequired,
-  offers: propTypes.arrayOf(propTypesData.offer).isRequired
 };
 
 export default FavoritesList;

@@ -52,7 +52,7 @@ exports[`Test MainPage test renderer 1`] = `
           <span
             className="places__sorting-type"
             onClick={[Function]}
-            tabIndex="0"
+            tabIndex={0}
           >
             Popular
             <svg
@@ -77,7 +77,7 @@ exports[`Test MainPage test renderer 1`] = `
               className="places__option places__option--active"
               data-sort-offers="default"
               onClick={[Function]}
-              tabIndex="0"
+              tabIndex={0}
             >
               Popular
             </li>
@@ -85,7 +85,7 @@ exports[`Test MainPage test renderer 1`] = `
               className="places__option "
               data-sort-offers="min-price"
               onClick={[Function]}
-              tabIndex="0"
+              tabIndex={0}
             >
               Price: low to high
             </li>
@@ -93,7 +93,7 @@ exports[`Test MainPage test renderer 1`] = `
               className="places__option "
               data-sort-offers="max-price"
               onClick={[Function]}
-              tabIndex="0"
+              tabIndex={0}
             >
               Price: high to low
             </li>
@@ -101,7 +101,7 @@ exports[`Test MainPage test renderer 1`] = `
               className="places__option "
               data-sort-offers="max-rate"
               onClick={[Function]}
-              tabIndex="0"
+              tabIndex={0}
             >
               Top rated first
             </li>

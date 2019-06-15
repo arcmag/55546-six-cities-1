@@ -1,5 +1,7 @@
+import * as React from 'react';
+import * as renderer from 'react-test-renderer';
+
 import {BrowserRouter} from "react-router-dom";
-import renderer from 'react-test-renderer';
 
 import Header from './header';
 
