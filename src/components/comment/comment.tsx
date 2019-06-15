@@ -12,8 +12,6 @@ interface Props {
 const Comment: React.FunctionComponent<Props> = (props) => {
   const {user, rating, comment, date} = props.data;
 
-  console.log(props.data);
-
   return <li className="reviews__item">
     <div className="reviews__user user">
       <div className="reviews__avatar-wrapper user__avatar-wrapper">
